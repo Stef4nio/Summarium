@@ -65,7 +65,10 @@ public class UIView {
         _menuDialog.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                _menuDialog.hide();
+                if(!_gameModel.isFirstRun())
+                {
+                    _menuDialog.hide();
+                }
             }
         });
         _playButton.addListener(new ClickListener(){
@@ -179,7 +182,11 @@ public class UIView {
 
     public void ShowMenu()
     {
+        Color color = _menuDialog.getColor();
+        color.a = 0;
+        _menuDialog.setColor(color);
         _menuDialog.show(_gameStage);
+
     }
 
     private void InitUIView()
@@ -233,17 +240,6 @@ public class UIView {
                 }
             }
         });
-        /*_eventManager.Subscribe(EventType.AnimationEnded, new EventListener(){
-            @Override
-            public void HandleEvent() {
-                if(isWon)
-                {
-                    SoundManager.getSoundManager().PlaySound(SoundType.WinSound);
-                    _winDialog.show(_gameStage);
-                    isWon = false;
-                }
-            }
-        });*/
         _gameStage.addActor(_helpButton);
         _gameStage.addActor(_menuButton);
     }

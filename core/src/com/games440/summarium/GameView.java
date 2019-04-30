@@ -199,7 +199,7 @@ public class GameView extends ApplicationAdapter {
 				}
 				if(_gameModel.isFirstRun())
 				{
-					_gameFieldView[i][j].FirstTimeAppear(((GameConfig.CELLS_IN_VERTICAL-i)*GameConfig.CELLS_IN_HORIZONTAL+j)/25f,(i==0&&j==GameConfig.CELLS_IN_HORIZONTAL-1),j,i);
+					_gameFieldView[i][j].FirstTimeAppear(((GameConfig.CELLS_IN_VERTICAL-i)*GameConfig.CELLS_IN_HORIZONTAL+j)/30f,(i==0&&j==GameConfig.CELLS_IN_HORIZONTAL-1),j,i);
 				}
 			}
 		}

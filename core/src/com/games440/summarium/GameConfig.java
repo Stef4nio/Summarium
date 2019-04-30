@@ -9,6 +9,8 @@ public class GameConfig {
     public static float CELL_Y_PADDING = 9.5f;
     public static float SCREEN_WIDTH = 1080;
     public static float SCREEN_HEIGHT = 1920;
+    public static float MIN_SCREEN_WIDTH = 1080;
+    public static float MIN_SCREEN_HEIGHT = 1920;
     public static int MAX_AIM = 19;
     public static int MIN_AIM = 10;
 }

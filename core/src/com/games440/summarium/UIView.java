@@ -36,6 +36,8 @@ public class UIView {
     public EventManager _eventManager;
     @Inject
     public StateManager _stateManager;
+    @Inject
+    public IGameModelReadonly _gameModel;
 
     public UIView(Stage gameStage)
     {
@@ -70,14 +72,23 @@ public class UIView {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 _menuDialog.hide();
-                SoundManager.getSoundManager().PlaySound(SoundType.LetsPlaySound);
+                if(_gameModel.isFirstRun())
+                {
+                    _eventManager.Dispatch(EventType.RestartNeeded);
+                }
             }
         });
         _restartButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 _menuDialog.hide(null);
-                _confirmationPopup.show(_gameStage,null);
+                if(_gameModel.isFirstRun())
+                {
+                    _eventManager.Dispatch(EventType.RestartNeeded);
+                }
+                else {
+                    _confirmationPopup.show(_gameStage, null);
+                }
                 playUIClickSound();
             }
         });
@@ -86,7 +97,6 @@ public class UIView {
             public void clicked(InputEvent event, float x, float y) {
                 _confirmationPopup.hide(null);
                 _eventManager.Dispatch(EventType.RestartNeeded);
-                SoundManager.getSoundManager().PlaySound(SoundType.LetsPlaySound);
             }
         });
         _noConfirmationPopupButton.addListener(new ClickListener(){
@@ -102,7 +112,6 @@ public class UIView {
             public void clicked(InputEvent event, float x, float y) {
                 _winDialog.hide(null);
                 _eventManager.Dispatch(EventType.RestartNeeded);
-                SoundManager.getSoundManager().PlaySound(SoundType.LetsPlaySound);
             }
         });
         _noWinDialogButton.addListener(new ClickListener(){
@@ -138,7 +147,7 @@ public class UIView {
         menuDialogLayout.add(_quitButton);
         menuDialogLayout.setFillParent(true);
         _menuDialog.addActor(menuDialogLayout);
-        Table confirmationPopupLayout = new Table();
+        _confirmationPopup.setPosition((GameConfig.SCREEN_WIDTH - _confirmationPopup.getBackground().getMinWidth()) / 2, (GameConfig.SCREEN_HEIGHT - _confirmationPopup.getBackground().getMinHeight()) / 2);        Table confirmationPopupLayout = new Table();
         confirmationPopupLayout.row().padTop(300f);
         confirmationPopupLayout.add(_yesConfirmationPopupButton).padRight(50f);
         confirmationPopupLayout.add(_noConfirmationPopupButton).padLeft(50f);
@@ -166,6 +175,11 @@ public class UIView {
     private void playUIClickSound()
     {
         SoundManager.getSoundManager().PlaySound(SoundType.UIClicked);
+    }
+
+    public void ShowMenu()
+    {
+        _menuDialog.show(_gameStage);
     }
 
     private void InitUIView()

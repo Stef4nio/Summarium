@@ -45,7 +45,9 @@ public class GameView extends ApplicationAdapter {
 		_topBar = ImageSourceConfig.getImageSourceConfig().getTopBar();
 		_aimImage = ImageSourceConfig.getImageSourceConfig().getAimNumber(_gameModel.GetAim());
 		_gameFieldBackground = ImageSourceConfig.getImageSourceConfig().getFieldBackground();
-		gameStage = new Stage(new ExtendViewport(GameConfig.SCREEN_WIDTH, GameConfig.SCREEN_HEIGHT));
+		gameStage = new Stage(new ExtendViewport(GameConfig.MIN_SCREEN_WIDTH, GameConfig.MIN_SCREEN_HEIGHT));
+		GameConfig.SCREEN_WIDTH = gameStage.getWidth();
+		GameConfig.SCREEN_HEIGHT = gameStage.getHeight();
 		gameStage.getViewport().setScreenSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		gameStage.getViewport().apply();
 		_gameFieldBackground.setPosition((gameStage.getWidth()-_gameFieldBackground.getDrawable().getMinWidth())/2,10);
@@ -54,7 +56,7 @@ public class GameView extends ApplicationAdapter {
 		_topBar.setPosition((gameStage.getWidth()-_topBar.getDrawable().getMinWidth())/2,1550);
 		_aimImage.setPosition((gameStage.getWidth()-_aimImage.getDrawable().getMinWidth()*_aimImage.getScaleX())/2,_topBar.getY()+(_topBar.getDrawable().getMinHeight()-_aimImage.getDrawable().getMinHeight()*_aimImage.getScaleY())/2);
 		_uiView = new UIView(gameStage);
-		redrawField();
+		//redrawField();
 		gameStage.addActor(_topBar);
 		gameStage.addActor(_aimImage);
 		_eventManager.Subscribe(EventType.ModelChanged,new EventListener(){
@@ -68,7 +70,7 @@ public class GameView extends ApplicationAdapter {
 			public void HandleEvent(int param) {
 				_aimImage.remove();
 				_aimImage = ImageSourceConfig.getImageSourceConfig().getAimNumber(_gameModel.GetAim());
-				_aimImage.setPosition((GameConfig.SCREEN_WIDTH-_aimImage.getDrawable().getMinWidth()*_aimImage.getScaleX())/2,_topBar.getY()+(_topBar.getDrawable().getMinHeight()-_aimImage.getDrawable().getMinHeight()*_aimImage.getScaleY())/2);
+				_aimImage.setPosition((gameStage.getWidth()-_aimImage.getDrawable().getMinWidth()*_aimImage.getScaleX())/2,_topBar.getY()+(_topBar.getDrawable().getMinHeight()-_aimImage.getDrawable().getMinHeight()*_aimImage.getScaleY())/2);
 				_aimImage.addListener(new ClickListener(){
 					@Override
 					public void clicked(InputEvent event, float x, float y) {
@@ -91,7 +93,7 @@ public class GameView extends ApplicationAdapter {
 						{
 							ViewCell tempCell = _gameFieldView[i][j];
 							if(!tempCell.isPreviouslyCleared()) {
-								_cellClearEffect.addEmitterToPoint(tempCell.getCenterX(j), tempCell.getCenterY(i));
+								_cellClearEffect.addEmitterToPoint(tempCell.getCenterX(), tempCell.getCenterY());
 							}
 							tempCell.Draw(gameStage,j,i,false);
 							return;
@@ -160,11 +162,12 @@ public class GameView extends ApplicationAdapter {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				if(_stateManager.getGameState() == GameState.Idle) {
-					_modeSelectWindow.Show(gameStage, true);
+					_modeSelectWindow.Show(gameStage,true);
 				}
 			}
 		});
 		Gdx.input.setInputProcessor(gameStage);
+		_uiView.ShowMenu();
 	}
 
 	@Override
@@ -193,6 +196,10 @@ public class GameView extends ApplicationAdapter {
 				}
 				if(_gameFieldView[i][j].isChanged()) {
 					_gameFieldView[i][j].Draw(gameStage,j,i,true);
+				}
+				if(_gameModel.isFirstRun())
+				{
+					_gameFieldView[i][j].FirstTimeAppear(((GameConfig.CELLS_IN_VERTICAL-i)*GameConfig.CELLS_IN_HORIZONTAL+j)/25f,(i==0&&j==GameConfig.CELLS_IN_HORIZONTAL-1),j,i);
 				}
 			}
 		}

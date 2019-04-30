@@ -13,6 +13,7 @@ public class GameModel implements IGameModelReadonly {
     private List<ModelCell> _selectedCells;
     private int _aimValue = 10;
     private boolean isWon = false;
+    private boolean isFirstRun;
 
     @Override
     public int GetAim() {
@@ -33,6 +34,7 @@ public class GameModel implements IGameModelReadonly {
         _eventManager = eventManager;
         _stateManager = stateManager;
         _randomManager = randomManager;
+        isFirstRun = true;
         _selectedCells = new LinkedList<ModelCell>();
         for(int i = 0; i<GameConfig.CELLS_IN_VERTICAL;i++)
         {
@@ -104,8 +106,15 @@ public class GameModel implements IGameModelReadonly {
         }
     }
 
+    @Override
+    public boolean isFirstRun()
+    {
+        return isFirstRun;
+    }
+
     public void RestartModel()
     {
+        isFirstRun = true;
         _selectedCells.clear();
         isWon = false;
         for(int i = 0; i<GameConfig.CELLS_IN_VERTICAL;i++)
@@ -117,6 +126,7 @@ public class GameModel implements IGameModelReadonly {
         }
         _stateManager.ChangeState(GameState.Idle);
         _eventManager.Dispatch(EventType.ModelChanged);
+        isFirstRun = false;
     }
 
     private void CompressModel()

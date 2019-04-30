@@ -7,6 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
+import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
+import com.badlogic.gdx.scenes.scene2d.actions.ParallelAction;
 import com.badlogic.gdx.scenes.scene2d.actions.ScaleToAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -21,6 +23,10 @@ public class ViewCell{
     private boolean isPreviouslyCleared = false;
     private boolean isCurrentlyCleared = false;
     private IModelCellReadonly _modelCell;
+    private float _borderWidth;
+    private float _borderHeight;
+    private float _stateImageWidth;
+    private float _stateImageHeight;
     @Inject
     EventManager _eventManager;
 
@@ -39,6 +45,10 @@ public class ViewCell{
                 _eventManager.Dispatch(EventType.Click,_modelCell.GetId());
             }
         });
+        _borderWidth = border.getDrawable().getMinWidth()*border.getScaleX();
+        _borderHeight = border.getDrawable().getMinHeight()*border.getScaleY();
+        _stateImageWidth = stateImage.getDrawable().getMinWidth()*stateImage.getScaleX();
+        _stateImageHeight = stateImage.getDrawable().getMinHeight()*stateImage.getScaleY();
     }
 
     public void Animate()
@@ -52,7 +62,6 @@ public class ViewCell{
         sequence.addAction(new Action() {
             @Override
             public boolean act(float delta) {
-                //_stateManager.ChangeState(GameState.Adding);
                 _eventManager.Dispatch(EventType.MotionEnded);
                 return true;
             }
@@ -61,17 +70,68 @@ public class ViewCell{
         aimImage.addAction(sequence);
     }
 
-    public void FirstTimeAppear(float delay)
+    public void FirstTimeAppear(float delay, boolean isLast, int modelX, int modelY)
     {
         SequenceAction sequence = new SequenceAction();
         DelayAction delayAction = new DelayAction(delay);
         sequence.addAction(delayAction);
         aimImage.setScale(0);
+        ParallelAction parallelAction = new ParallelAction();
+        MoveToAction moveToAction = new MoveToAction();
+        moveToAction.setPosition(getCenterX(),getCenterY());
+        moveToAction.setReverse(true);
+        moveToAction.setDuration(0.3f);
         ScaleToAction scaleAction = new ScaleToAction();
         scaleAction.setScale(1);
         scaleAction.setDuration(0.3f);
-        sequence.addAction(scaleAction);
+        parallelAction.addAction(moveToAction);
+        parallelAction.addAction(scaleAction);
+        sequence.addAction(parallelAction);
+        if(isLast)
+        {
+            sequence.addAction(new Action() {
+                @Override
+                public boolean act(float delta) {
+                    SoundManager.getSoundManager().PlaySound(SoundType.LetsPlaySound);
+                    return true;
+                }
+            });
+        }
         aimImage.addAction(sequence);
+
+        sequence = new SequenceAction();
+        delayAction = new DelayAction(delay);
+        sequence.addAction(delayAction);
+        stateImage.setScale(0);
+        parallelAction = new ParallelAction();
+        moveToAction = new MoveToAction();
+        moveToAction.setPosition(getCenterX(),getCenterY());
+        moveToAction.setReverse(true);
+        moveToAction.setDuration(0.3f);
+        scaleAction = new ScaleToAction();
+        scaleAction.setScale(1);
+        scaleAction.setDuration(0.3f);
+        parallelAction.addAction(moveToAction);
+        parallelAction.addAction(scaleAction);
+        sequence.addAction(parallelAction);
+        stateImage.addAction(sequence);
+
+        sequence = new SequenceAction();
+        delayAction = new DelayAction(delay);
+        sequence.addAction(delayAction);
+        border.setScale(0);
+        parallelAction = new ParallelAction();
+        moveToAction = new MoveToAction();
+        moveToAction.setPosition(getCenterX(),getCenterY());
+        moveToAction.setReverse(true);
+        moveToAction.setDuration(0.3f);
+        scaleAction = new ScaleToAction();
+        scaleAction.setScale(1);
+        scaleAction.setDuration(0.3f);
+        parallelAction.addAction(moveToAction);
+        parallelAction.addAction(scaleAction);
+        sequence.addAction(parallelAction);
+        border.addAction(sequence);
     }
 
     public boolean hasOffset()
@@ -103,9 +163,11 @@ public class ViewCell{
         isPreviouslyCleared = isCurrentlyCleared;
         isCurrentlyCleared = _modelCell.isCleared();
         stateImage = ImageSourceConfig.getImageSourceConfig().getCellBackgroundByState(state,_modelCell.isCleared());
-        border.setPosition(modelX*(border.getDrawable().getMinWidth()*border.getScaleX()+GameConfig.CELL_X_PADDING)+ GameConfig.TABLE_X_OFFSET,modelY*(border.getDrawable().getMinHeight()*border.getScaleY()+GameConfig.CELL_Y_PADDING)+GameConfig.TABLE_Y_OFFSET);
-        stateImage.setPosition(modelX*(border.getDrawable().getMinWidth()*border.getScaleX()+GameConfig.CELL_X_PADDING)+ GameConfig.TABLE_X_OFFSET +(border.getDrawable().getMinWidth()*border.getScaleY()-stateImage.getDrawable().getMinWidth()*stateImage.getScaleX())/2,modelY*(border.getDrawable().getMinHeight()+GameConfig.CELL_Y_PADDING)+GameConfig.TABLE_Y_OFFSET+(border.getDrawable().getMinHeight()-stateImage.getDrawable().getMinHeight()*stateImage.getScaleY())/2);
-        aimImage.setPosition(modelX*(border.getDrawable().getMinWidth()*border.getScaleX()+GameConfig.CELL_X_PADDING)+ GameConfig.TABLE_X_OFFSET +(border.getDrawable().getMinWidth()*border.getScaleY()-aimImage.getDrawable().getMinWidth()*aimImage.getScaleX())/2,modelY*(border.getDrawable().getMinHeight()+GameConfig.CELL_Y_PADDING)+GameConfig.TABLE_Y_OFFSET+(border.getDrawable().getMinHeight()-aimImage.getDrawable().getMinHeight()*aimImage.getScaleY())/2);
+        border.setPosition(modelX*(_borderWidth+GameConfig.CELL_X_PADDING)+ GameConfig.TABLE_X_OFFSET,
+                modelY*(_borderHeight+GameConfig.CELL_Y_PADDING)+GameConfig.TABLE_Y_OFFSET);
+        stateImage.setPosition(modelX*(_borderWidth+GameConfig.CELL_X_PADDING)+ GameConfig.TABLE_X_OFFSET +(_borderWidth-_stateImageWidth)/2,
+                modelY*(_borderHeight+GameConfig.CELL_Y_PADDING)+GameConfig.TABLE_Y_OFFSET+(_borderHeight-_stateImageHeight)/2);
+        aimImage.setPosition(stateImage.getX(),stateImage.getY());
         gameStage.addActor(stateImage);
         if(drawNumber)
         {
@@ -126,9 +188,10 @@ public class ViewCell{
         return _modelCell.isChanged();
     }
 
-    public float getCenterX(int modelX)
+    public float getCenterX()
     {
-        return (modelX*(border.getDrawable().getMinWidth()*border.getScaleX()+GameConfig.CELL_X_PADDING)+GameConfig.TABLE_X_OFFSET+border.getDrawable().getMinWidth()/2f);
+        //return (modelX*(_borderWidth+GameConfig.CELL_X_PADDING)+GameConfig.TABLE_X_OFFSET+_borderWidth/2f);
+        return stateImage.getX()+_stateImageWidth/2;
     }
 
     public boolean isPreviouslyCleared()
@@ -136,8 +199,9 @@ public class ViewCell{
         return isPreviouslyCleared;
     }
 
-    public float getCenterY(int modelY)
+    public float getCenterY()
     {
-        return (modelY*(border.getDrawable().getMinHeight()*border.getScaleY()+GameConfig.CELL_Y_PADDING)+GameConfig.TABLE_Y_OFFSET+border.getDrawable().getMinHeight()/2f);
+        //return (modelY*(_borderHeight*border.getScaleY()+GameConfig.CELL_Y_PADDING)+GameConfig.TABLE_Y_OFFSET+_borderHeight/2f);
+        return stateImage.getY()+_stateImageHeight/2;
     }
 }

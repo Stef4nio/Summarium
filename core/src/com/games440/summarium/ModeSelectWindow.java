@@ -59,6 +59,9 @@ public class ModeSelectWindow {
                 if(_tempAim!=_currAim) {
                     _currAim = _tempAim;
                     _eventManager.Dispatch(EventType.AimChanged, _currAim);
+                }else if(_gameModel.isFirstRun())
+                {
+                    _eventManager.Dispatch(EventType.RestartNeeded);
                 }
                 playUIClickSound();
             }
@@ -101,6 +104,7 @@ public class ModeSelectWindow {
 
     public void Show(Stage stage, boolean doAnimate)
     {
+        _modeSelectDialog.setPosition((stage.getWidth() - _modeSelectDialog.getBackground().getMinWidth()) / 2, (stage.getHeight() - _modeSelectDialog.getBackground().getMinHeight()) / 2);
         if(doAnimate)
         {
             Color color = _modeSelectDialog.getColor();

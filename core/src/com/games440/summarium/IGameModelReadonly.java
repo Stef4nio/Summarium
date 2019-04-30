@@ -4,4 +4,5 @@ public interface IGameModelReadonly {
 
     IModelCellReadonly[][] GetGameFieldModel();
     int GetAim();
+    boolean isFirstRun();
 }

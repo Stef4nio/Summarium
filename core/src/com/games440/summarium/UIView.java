@@ -180,12 +180,17 @@ public class UIView {
         SoundManager.getSoundManager().PlaySound(SoundType.UIClicked);
     }
 
-    public void ShowMenu()
+    public void SetMenuVisibility(boolean visibility)
     {
-        Color color = _menuDialog.getColor();
-        color.a = 0;
-        _menuDialog.setColor(color);
-        _menuDialog.show(_gameStage);
+        if(visibility) {
+            Color color = _menuDialog.getColor();
+            color.a = 0;
+            _menuDialog.setColor(color);
+            _menuDialog.show(_gameStage);
+        }else
+        {
+            _menuDialog.hide();
+        }
 
     }
 

@@ -28,11 +28,15 @@ public class GameView extends ApplicationAdapter {
 	StateManager _stateManager;
 	@Inject
 	ModeSelectWindow _modeSelectWindow;
-	private GameController _controller = new GameController();
-	private ViewCell[][] _gameFieldView = new ViewCell[GameConfig.CELLS_IN_VERTICAL][GameConfig.CELLS_IN_HORIZONTAL];
+	private GameController _controller;
+	private ViewCell[][] _gameFieldView;
 	private UIView _uiView;
 
-
+    public GameView()
+    {
+        _gameFieldView = new ViewCell[GameConfig.CELLS_IN_VERTICAL][GameConfig.CELLS_IN_HORIZONTAL];
+        _controller = new GameController();
+    }
 
 
 	@Override
@@ -167,8 +171,10 @@ public class GameView extends ApplicationAdapter {
 			}
 		});
 		Gdx.input.setInputProcessor(gameStage);
-		_uiView.ShowMenu();
+		_uiView.SetMenuVisibility(true);
 	}
+
+
 
 	@Override
 	public void render () {
@@ -185,7 +191,8 @@ public class GameView extends ApplicationAdapter {
 		gameStage.dispose();
 	}
 
-	private void redrawField()
+
+	public void redrawField()
 	{
 		for(int i = 0; i< GameConfig.CELLS_IN_VERTICAL;i++)
 		{

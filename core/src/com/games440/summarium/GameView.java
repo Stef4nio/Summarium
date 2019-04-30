@@ -19,6 +19,7 @@ public class GameView extends ApplicationAdapter {
 	private Image _gameFieldBackground;
 	private Image _topBar;
 	private Image _aimImage;
+	private Particle _cellClearEffect;
 	@Inject
 	public IGameModelReadonly _gameModel;
 	@Inject
@@ -39,6 +40,8 @@ public class GameView extends ApplicationAdapter {
 		batch = new SpriteBatch();
 		DaggerContainer.getDaggerBinder().inject(this);
 		SoundManager.InitSoundManager();
+		_cellClearEffect = new Particle();
+		_cellClearEffect.load(Gdx.files.internal("ParticleEffects/CellClearEffect/Particle Park Glass.p"),Gdx.files.internal("ParticleEffects/CellClearEffect/"));
 		_topBar = ImageSourceConfig.getImageSourceConfig().getTopBar();
 		_aimImage = ImageSourceConfig.getImageSourceConfig().getAimNumber(_gameModel.GetAim());
 		_gameFieldBackground = ImageSourceConfig.getImageSourceConfig().getFieldBackground();
@@ -86,7 +89,11 @@ public class GameView extends ApplicationAdapter {
 					{
 						if(param == _gameFieldView[i][j].getId())
 						{
-							_gameFieldView[i][j].Draw(gameStage,j,i,false);
+							ViewCell tempCell = _gameFieldView[i][j];
+							if(!tempCell.isPreviouslyCleared()) {
+								_cellClearEffect.addEmitterToPoint(tempCell.getCenterX(j), tempCell.getCenterY(i));
+							}
+							tempCell.Draw(gameStage,j,i,false);
 							return;
 						}
 					}
@@ -102,7 +109,11 @@ public class GameView extends ApplicationAdapter {
 		_eventManager.Subscribe(EventType.GameStateChanged,new GameStateChangeListener(){
 			@Override
 			public void HandleEvent(GameState gameState) {
-				if(gameState == GameState.Adding)
+				if(gameState == GameState.AnimatingParticles)
+				{
+					_cellClearEffect.start();
+				}
+				else if(gameState == GameState.Adding)
 				{
 					redrawField();
 					_stateManager.ChangeState(GameState.Idle);
@@ -161,6 +172,7 @@ public class GameView extends ApplicationAdapter {
 		Gdx.gl.glClearColor(0.17254902f, 0.11372549f, 0.11372549f, 1.0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		gameStage.draw();
+		_cellClearEffect.draw(gameStage.getBatch(),Gdx.graphics.getDeltaTime());
 		gameStage.act(Gdx.graphics.getDeltaTime());
 	}
 

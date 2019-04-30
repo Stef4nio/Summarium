@@ -135,7 +135,7 @@ public class GameModel implements IGameModelReadonly {
             }
         }
         deselectAllSelectedCells();
-        _stateManager.ChangeState(GameState.Moving);
+        _stateManager.ChangeState(GameState.AnimatingParticles);
     }
 
     public void makeAllCellsNotNew()

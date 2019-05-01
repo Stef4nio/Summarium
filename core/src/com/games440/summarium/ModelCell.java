@@ -2,11 +2,13 @@ package com.games440.summarium;
 
 public class ModelCell implements IModelCellReadonly {
     private int _value;
-    private int _id;
+    //private int _id;
+    public int _id;
     private int _offset;
     private ViewCellState _state;
     private boolean isChanged;
-    private boolean isCleared;
+    //private boolean isCleared;
+    public boolean isCleared;
     private boolean isNew;
 
     public ModelCell(int value, int id) {

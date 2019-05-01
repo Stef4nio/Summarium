@@ -2,6 +2,8 @@ package com.games440.summarium;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
@@ -28,6 +30,7 @@ public class UIView {
     private ImageButton _quitButton;
     private ImageButton _menuButton;
     private ImageButton _helpButton;
+    private WinParticleEffect _winEffect;
     private Stage _gameStage;
     private boolean isWon = false;
     @Inject
@@ -42,6 +45,7 @@ public class UIView {
     public UIView(Stage gameStage)
     {
         _gameStage = gameStage;
+        _winEffect = new WinParticleEffect();
         _uiSkin = new Skin(Gdx.files.internal("UISkin.json"));
         _menuDialog = new Dialog("", _uiSkin,"window_menu");
         _helpDialog = new Dialog("",_uiSkin,"window_help");
@@ -235,6 +239,7 @@ public class UIView {
             public void HandleEvent(GameState gameState) {
                 if(gameState == GameState.Idle && isWon)
                 {
+                    _winEffect.start();
                     SoundManager.getSoundManager().PlaySound(SoundType.WinSound);
                     _winDialog.toFront();
                     Color color = _winDialog.getColor();
@@ -247,5 +252,10 @@ public class UIView {
         });
         _gameStage.addActor(_helpButton);
         _gameStage.addActor(_menuButton);
+    }
+
+    public void drawEffects(Batch batch, float delta)
+    {
+        _winEffect.Draw(batch,delta);
     }
 }

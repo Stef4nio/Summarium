@@ -3,7 +3,6 @@ package com.games440.summarium;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -46,6 +45,13 @@ public class GameView extends ApplicationAdapter {
 		SoundManager.InitSoundManager();
 		_cellClearEffect = new Particle();
 		_cellClearEffect.load(Gdx.files.internal("ParticleEffects/CellClearEffect/Particle Park Glass.p"),Gdx.files.internal("ParticleEffects/CellClearEffect/"));
+		_cellClearEffect.addOnCompleteListener(new OnParticleCompleteCallback() {
+			@Override
+			public void run() {
+				_stateManager.ChangeState(GameState.Moving);
+			}
+		});
+		_cellClearEffect.addSound(SoundType.CellClearSound);
 		_topBar = ImageSourceConfig.getImageSourceConfig().getTopBar();
 		_aimImage = ImageSourceConfig.getImageSourceConfig().getAimNumber(_gameModel.GetAim());
 		_gameFieldBackground = ImageSourceConfig.getImageSourceConfig().getFieldBackground();
@@ -117,7 +123,9 @@ public class GameView extends ApplicationAdapter {
 			public void HandleEvent(GameState gameState) {
 				if(gameState == GameState.AnimatingParticles)
 				{
-					_cellClearEffect.start();
+					if(!_cellClearEffect.start()) {
+						_stateManager.ChangeState(GameState.Moving);
+					}
 				}
 				else if(gameState == GameState.Adding)
 				{
@@ -182,6 +190,7 @@ public class GameView extends ApplicationAdapter {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		gameStage.draw();
 		_cellClearEffect.draw(gameStage.getBatch(),Gdx.graphics.getDeltaTime());
+		_uiView.drawEffects(gameStage.getBatch(),Gdx.graphics.getDeltaTime());
 		gameStage.act(Gdx.graphics.getDeltaTime());
 	}
 

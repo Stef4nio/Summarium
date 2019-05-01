@@ -14,5 +14,4 @@ public interface IComponent {
     void inject(UIView uiView);
     void inject(ModeSelectWindow modeSelectWindow);
     void inject(StateManager stateManager);
-    void inject(Particle particle);
 }

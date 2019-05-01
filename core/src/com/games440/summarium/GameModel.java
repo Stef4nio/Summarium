@@ -122,10 +122,6 @@ public class GameModel implements IGameModelReadonly {
             for(int j = 0; j<GameConfig.CELLS_IN_HORIZONTAL;j++)
             {
                 _gameFieldModel[i][j].Refresh(_randomManager.getRandomNumber(_aimValue));
-                if(_gameFieldModel[i][j]._id != 20)
-                {
-                    _gameFieldModel[i][j].isCleared = true;
-                }
             }
         }
         _stateManager.ChangeState(GameState.Idle);

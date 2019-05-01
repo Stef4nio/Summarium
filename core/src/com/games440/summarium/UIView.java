@@ -118,6 +118,7 @@ public class UIView {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 _winDialog.hide(null);
+                _winEffect.stop();
                 _eventManager.Dispatch(EventType.RestartNeeded);
             }
         });
@@ -125,6 +126,7 @@ public class UIView {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 _winDialog.hide(null);
+                _winEffect.stop();
                 playUIClickSound();
             }
         });

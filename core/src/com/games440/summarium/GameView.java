@@ -48,6 +48,7 @@ public class GameView extends ApplicationAdapter {
 		_cellClearEffect.addOnCompleteListener(new OnParticleCompleteCallback() {
 			@Override
 			public void run() {
+				_cellClearEffect.ClearAddedEmitters();
 				_stateManager.ChangeState(GameState.Moving);
 			}
 		});

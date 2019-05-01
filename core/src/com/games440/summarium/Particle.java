@@ -32,6 +32,7 @@ public class Particle {
         {
             effect.dispose();
         }
+        _isStarted = false;
     }
 
     public boolean start() {
@@ -64,13 +65,17 @@ public class Particle {
             }
             else {
                 _isStarted = false;
-                _effects.clear();
                 if(_callback!=null) {
                     _callback.run();
                 }
             }
             spriteBatch.end();
         }
+    }
+
+    public void ClearAddedEmitters()
+    {
+        _effects.clear();
     }
 
     public void addSound(SoundType soundType)
@@ -91,4 +96,10 @@ public class Particle {
         _effects.add(particle);
     }
 
+    public void setPositionToEmitter(int emitterIndex,float x, float y)
+    {
+        if(emitterIndex<_effects.size()) {
+            _effects.get(emitterIndex).setPosition(x, y);
+        }
+    }
 }

@@ -1,7 +1,10 @@
 package com.games440.summarium;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -13,7 +16,7 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 
 import javax.inject.Inject;
 
-public class GameView extends ApplicationAdapter {
+public class GameView extends ApplicationAdapter implements InputProcessor, ApplicationListener {
 	private SpriteBatch batch;
 	private Stage gameStage;
 	private Image _gameFieldBackground;
@@ -42,6 +45,8 @@ public class GameView extends ApplicationAdapter {
 	public void create () {
 		batch = new SpriteBatch();
 		DaggerContainer.getDaggerBinder().inject(this);
+		Gdx.input.setInputProcessor(this);
+		Gdx.input.setCatchBackKey(true);
 		PlayerPreferencesContainer.Initialize(Gdx.app.getPreferences("SummariumPlayerPreferences"));
 		_controller = new GameController(PlayerPreferencesContainer.getPlayerPreferences());
 		SoundManager.InitSoundManager();
@@ -209,6 +214,9 @@ public class GameView extends ApplicationAdapter {
 		_cellClearEffect.draw(gameStage.getBatch(),Gdx.graphics.getDeltaTime());
 		_uiView.drawEffects(gameStage.getBatch(),Gdx.graphics.getDeltaTime());
 		gameStage.act(Gdx.graphics.getDeltaTime());
+		if (Gdx.input.isKeyPressed(Input.Keys.BACK)){
+			_uiView.handleBackButtonClick();
+		}
 	}
 
 	@Override
@@ -236,5 +244,46 @@ public class GameView extends ApplicationAdapter {
 				}
 			}
 		}
+	}
+
+	@Override
+	public boolean keyDown(int keycode)
+	{
+    	return false;
+	}
+
+	@Override
+	public boolean keyUp(int keycode) {
+		return false;
+	}
+
+	@Override
+	public boolean keyTyped(char character) {
+		return false;
+	}
+
+	@Override
+	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+		return false;
+	}
+
+	@Override
+	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+		return false;
+	}
+
+	@Override
+	public boolean touchDragged(int screenX, int screenY, int pointer) {
+		return false;
+	}
+
+	@Override
+	public boolean mouseMoved(int screenX, int screenY) {
+		return false;
+	}
+
+	@Override
+	public boolean scrolled(int amount) {
+		return false;
 	}
 }

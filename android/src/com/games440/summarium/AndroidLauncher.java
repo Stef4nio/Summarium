@@ -9,11 +9,20 @@ import com.games440.summarium.GameView;
 
 public class AndroidLauncher extends AndroidApplication {
 
+	private GameView _gameView;
+
 	@Override
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		config.useImmersiveMode = true;
-		initialize(new GameView(), config);
+		_gameView = new GameView();
+		initialize(_gameView, config);
+		//_gameView.create();
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
 	}
 }

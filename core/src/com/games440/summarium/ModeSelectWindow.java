@@ -118,4 +118,14 @@ public class ModeSelectWindow {
         }
     }
 
+    public boolean isVisible()
+    {
+        return _modeSelectDialog.isVisible();
+    }
+
+    public void Hide()
+    {
+        _modeSelectDialog.hide();
+    }
+
 }

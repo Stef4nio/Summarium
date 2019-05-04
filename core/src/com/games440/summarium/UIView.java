@@ -218,6 +218,35 @@ public class UIView {
 
     }
 
+    public void handleBackButtonClick()
+    {
+        if(!_gameModel.isFirstRun()) {
+            if (_menuDialog.isVisible()) {
+                _menuDialog.hide();
+            }else
+            {
+                _menuDialog.show(_gameStage);
+            }
+
+            if (_helpDialog.isVisible()) {
+
+                _helpDialog.hide();
+            }
+            if (_modeSelectWindow.isVisible()) {
+
+                _modeSelectWindow.Hide();
+            }
+            if(_confirmationPopup.isVisible())
+            {
+                _confirmationPopup.hide();
+            }
+            if (_winDialog.is)
+            {
+                _winDialog.hide();
+            }
+        }
+    }
+
     private void startGame()
     {
         _eventManager.Dispatch(EventType.RestartNeeded);

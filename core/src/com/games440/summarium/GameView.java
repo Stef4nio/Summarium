@@ -214,9 +214,10 @@ public class GameView extends ApplicationAdapter implements InputProcessor, Appl
 		_cellClearEffect.draw(gameStage.getBatch(),Gdx.graphics.getDeltaTime());
 		_uiView.drawEffects(gameStage.getBatch(),Gdx.graphics.getDeltaTime());
 		gameStage.act(Gdx.graphics.getDeltaTime());
-		if (Gdx.input.isKeyPressed(Input.Keys.BACK)){
+		if (Gdx.input.isKeyJustPressed(Input.Keys.BACK)){
 			_uiView.handleBackButtonClick();
 		}
+
 	}
 
 	@Override

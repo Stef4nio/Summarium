@@ -17,7 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import javax.inject.Inject;
 
 public class ModeSelectWindow {
-    private Dialog _modeSelectDialog;
+    private UIDialog _modeSelectDialog;
     private ImageButton _leftArrowButton;
     private ImageButton _rightArrowButton;
     private ImageButton _modeSelectConfirmButton;
@@ -40,7 +40,7 @@ public class ModeSelectWindow {
         _rightArrowButton = new ImageButton(_uiSkin, "button_right_arrow");
         _modeSelectConfirmButton = new ImageButton(_uiSkin, "button_ok");
         _modeSelectBackgroundImage = new Image(new Texture("circle.png"));
-        _modeSelectDialog = new Dialog("", _uiSkin, "window_mode");
+        _modeSelectDialog = new UIDialog("", _uiSkin, "window_mode");
         _modeSelectDialog.setPosition((GameConfig.SCREEN_WIDTH - _modeSelectDialog.getBackground().getMinWidth()) / 2, (GameConfig.SCREEN_HEIGHT - _modeSelectDialog.getBackground().getMinHeight()) / 2);
         Table modeChooseDialogLayout = new Table();
         updateModeSelectWindow();
@@ -126,6 +126,18 @@ public class ModeSelectWindow {
     public void Hide()
     {
         _modeSelectDialog.hide();
+    }
+
+    public void Hide(boolean doAnimate)
+    {
+        if(doAnimate)
+        {
+            _modeSelectDialog.hide();
+        }
+        else
+        {
+            _modeSelectDialog.hide(null);
+        }
     }
 
 }

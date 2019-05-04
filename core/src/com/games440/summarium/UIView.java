@@ -17,11 +17,11 @@ import javax.inject.Inject;
 
 public class UIView {
     private Skin _uiSkin;
-    private Dialog _menuDialog;
-    private Dialog _helpDialog;
-    private Dialog _confirmationPopup;
-    private Dialog _winDialog;
-    private Dialog _tutorialDialog;
+    private UIDialog _menuDialog;
+    private UIDialog _helpDialog;
+    private UIDialog _confirmationPopup;
+    private UIDialog _winDialog;
+    private UIDialog _tutorialDialog;
     private ImageButton _yesConfirmationPopupButton;
     private ImageButton _noConfirmationPopupButton;
     private ImageButton _yesWinDialogButton;
@@ -50,11 +50,11 @@ public class UIView {
         _gameStage = gameStage;
         _winEffect = new WinParticleEffect();
         _uiSkin = new Skin(Gdx.files.internal("UISkin.json"));
-        _menuDialog = new Dialog("", _uiSkin,"window_menu");
-        _helpDialog = new Dialog("",_uiSkin,"window_help");
-        _confirmationPopup = new Dialog("",_uiSkin,"window_confirmationPopup");
-        _winDialog = new Dialog("",_uiSkin,"window_winDialog");
-        _tutorialDialog = new Dialog("",_uiSkin,"window_tutorial");
+        _menuDialog = new UIDialog("", _uiSkin,"window_menu");
+        _helpDialog = new UIDialog("",_uiSkin,"window_help");
+        _confirmationPopup = new UIDialog("",_uiSkin,"window_confirmationPopup");
+        _winDialog = new UIDialog("",_uiSkin,"window_winDialog");
+        _tutorialDialog = new UIDialog("",_uiSkin,"window_tutorial");
         _playButton = new ImageButton(_uiSkin,"button_play");
         _modeButton = new ImageButton(_uiSkin,"button_mode");
         _restartButton = new ImageButton(_uiSkin,"button_restart");
@@ -221,28 +221,33 @@ public class UIView {
     public void handleBackButtonClick()
     {
         if(!_gameModel.isFirstRun()) {
+
+            if (_helpDialog.isVisible()) {
+
+                _helpDialog.hide();
+                return;
+            }
+            if (_modeSelectWindow.isVisible()) {
+                _modeSelectWindow.Hide(false);
+                return;
+            }
+            if(_confirmationPopup.isVisible())
+            {
+                _confirmationPopup.hide(null);
+                _menuDialog.show(_gameStage,null);
+                return;
+            }
+            if (_winDialog.isVisible())
+            {
+                _winDialog.hide();
+                return;
+            }
+
             if (_menuDialog.isVisible()) {
                 _menuDialog.hide();
             }else
             {
                 _menuDialog.show(_gameStage);
-            }
-
-            if (_helpDialog.isVisible()) {
-
-                _helpDialog.hide();
-            }
-            if (_modeSelectWindow.isVisible()) {
-
-                _modeSelectWindow.Hide();
-            }
-            if(_confirmationPopup.isVisible())
-            {
-                _confirmationPopup.hide();
-            }
-            if (_winDialog.is)
-            {
-                _winDialog.hide();
             }
         }
     }

@@ -70,7 +70,7 @@ public class ViewCell{
         aimImage.addAction(sequence);
     }
 
-    public void FirstTimeAppear(float delay, boolean isLast, int modelX, int modelY)
+    public void FirstTimeAppear(float delay,boolean isLastInRow, boolean isLast, int modelX, int modelY)
     {
         SequenceAction sequence = new SequenceAction();
         DelayAction delayAction = new DelayAction(delay);
@@ -93,6 +93,16 @@ public class ViewCell{
                 @Override
                 public boolean act(float delta) {
                     SoundManager.getSoundManager().PlaySound(SoundType.LetsPlaySound);
+                    return true;
+                }
+            });
+        }
+        else if(isLastInRow)
+        {
+            sequence.addAction(new Action() {
+                @Override
+                public boolean act(float delta) {
+                    SoundManager.getSoundManager().PlaySound(SoundType.RowAppearSound);
                     return true;
                 }
             });

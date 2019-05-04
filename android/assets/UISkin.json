@@ -72,6 +72,11 @@
 		"background": "WinDialog",
 		"titleFont": "default",
 		"stageBackground": "dimm"
+	},
+	"window_tutorial": {
+		"background": "Tutorial",
+		"titleFont": "default",
+		"stageBackground": "dimm"
 	}
 }
 }

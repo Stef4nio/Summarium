@@ -2,6 +2,7 @@ package com.games440.summarium;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -34,7 +35,6 @@ public class GameView extends ApplicationAdapter {
     public GameView()
     {
         _gameFieldView = new ViewCell[GameConfig.CELLS_IN_VERTICAL][GameConfig.CELLS_IN_HORIZONTAL];
-        _controller = new GameController();
     }
 
 
@@ -42,6 +42,8 @@ public class GameView extends ApplicationAdapter {
 	public void create () {
 		batch = new SpriteBatch();
 		DaggerContainer.getDaggerBinder().inject(this);
+		PlayerPreferencesContainer.Initialize(Gdx.app.getPreferences("SummariumPlayerPreferences"));
+		_controller = new GameController(PlayerPreferencesContainer.getPlayerPreferences());
 		SoundManager.InitSoundManager();
 		_cellClearEffect = new Particle();
 		_cellClearEffect.load(Gdx.files.internal("ParticleEffects/CellClearEffect/Particle Park Glass.p"),Gdx.files.internal("ParticleEffects/CellClearEffect/"));
@@ -74,6 +76,15 @@ public class GameView extends ApplicationAdapter {
 			@Override
 			public void HandleEvent() {
 				redrawField();
+			}
+		});
+		_eventManager.Subscribe(EventType.RestartNeeded,new EventListener(){
+			@Override
+			public void HandleEvent() {
+				if(!PlayerPreferencesContainer.getPlayerPreferences().contains(GameConfig.isFirstLaunchEverKey)||PlayerPreferencesContainer.getPlayerPreferences().getBoolean(GameConfig.isFirstLaunchEverKey)) {
+					PlayerPreferencesContainer.getPlayerPreferences().putBoolean(GameConfig.isFirstLaunchEverKey,false);
+					_uiView.showTutorial();
+				}
 			}
 		});
 		_eventManager.Subscribe(EventType.AimChanged,new EventListener(){
@@ -216,7 +227,7 @@ public class GameView extends ApplicationAdapter {
 				}
 				if(_gameModel.isFirstRun())
 				{
-					_gameFieldView[i][j].FirstTimeAppear(((GameConfig.CELLS_IN_VERTICAL-i)*GameConfig.CELLS_IN_HORIZONTAL+j)/30f,(i==0&&j==GameConfig.CELLS_IN_HORIZONTAL-1),j,i);
+					_gameFieldView[i][j].FirstTimeAppear(((GameConfig.CELLS_IN_VERTICAL-i)*GameConfig.CELLS_IN_HORIZONTAL+j)/30f,(j==GameConfig.CELLS_IN_HORIZONTAL-1) ,(i==0&&j==GameConfig.CELLS_IN_HORIZONTAL-1),j,i);
 				}
 			}
 		}

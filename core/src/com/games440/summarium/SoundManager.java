@@ -14,8 +14,10 @@ public class SoundManager {
     private Sound _playButtonClickSound;
     private Sound _winSound;
     private Sound _cellClearSound;
+    private Sound _rowAppearSound;
     private Music _backgroundMusic;
     private Hashtable<SoundType,Sound> _sounds = new Hashtable<SoundType, Sound>();
+    private Sound[] _fireworksSounds;
     private static SoundManager _soundManager = new SoundManager();
 
     private SoundManager()
@@ -28,6 +30,12 @@ public class SoundManager {
         _backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("Audio/loops/Laid Back LOOP.wav"));
         _winSound = Gdx.audio.newSound(Gdx.files.internal("Audio/VOICE_Girl_4yo_You_Win_01.wav"));
         _cellClearSound = Gdx.audio.newSound(Gdx.files.internal("Audio/breaking-glass.wav"));
+        _rowAppearSound = Gdx.audio.newSound(Gdx.files.internal("Audio/row_appear.wav"));
+        _fireworksSounds = new Sound[4];
+        for(int i = 0;i<_fireworksSounds.length;i++)
+        {
+            _fireworksSounds[i] = Gdx.audio.newSound(Gdx.files.internal("Audio/FIREWORKS_Rocket_Explode_RR"+(i+1)+"_mono.wav"));
+        }
         _backgroundMusic.setLooping(true);
         _backgroundMusic.setVolume(0.3f);
         _backgroundMusic.play();
@@ -38,11 +46,17 @@ public class SoundManager {
         _sounds.put(SoundType.LetsPlaySound,_playButtonClickSound);
         _sounds.put(SoundType.WinSound,_winSound);
         _sounds.put(SoundType.CellClearSound,_cellClearSound);
+        _sounds.put(SoundType.RowAppearSound,_rowAppearSound);
     }
 
     public void PlaySound(SoundType type)
     {
         _sounds.get(type).play(0.5f);
+    }
+
+    public void PlayFireworkSound(int fireworkType)
+    {
+        _fireworksSounds[fireworkType].play(0.5f);
     }
 
     public static SoundManager getSoundManager()

@@ -1,6 +1,7 @@
 package com.games440.summarium;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -20,6 +21,7 @@ public class UIView {
     private Dialog _helpDialog;
     private Dialog _confirmationPopup;
     private Dialog _winDialog;
+    private Dialog _tutorialDialog;
     private ImageButton _yesConfirmationPopupButton;
     private ImageButton _noConfirmationPopupButton;
     private ImageButton _yesWinDialogButton;
@@ -42,6 +44,7 @@ public class UIView {
     @Inject
     public IGameModelReadonly _gameModel;
 
+
     public UIView(Stage gameStage)
     {
         _gameStage = gameStage;
@@ -51,6 +54,7 @@ public class UIView {
         _helpDialog = new Dialog("",_uiSkin,"window_help");
         _confirmationPopup = new Dialog("",_uiSkin,"window_confirmationPopup");
         _winDialog = new Dialog("",_uiSkin,"window_winDialog");
+        _tutorialDialog = new Dialog("",_uiSkin,"window_tutorial");
         _playButton = new ImageButton(_uiSkin,"button_play");
         _modeButton = new ImageButton(_uiSkin,"button_mode");
         _restartButton = new ImageButton(_uiSkin,"button_restart");
@@ -75,13 +79,20 @@ public class UIView {
                 }
             }
         });
+        _tutorialDialog.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                _tutorialDialog.hide();
+                startGame();
+            }
+        });
         _playButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 _menuDialog.hide();
                 if(_gameModel.isFirstRun())
                 {
-                    _eventManager.Dispatch(EventType.RestartNeeded);
+                    startGame();
                 }
             }
         });
@@ -91,7 +102,7 @@ public class UIView {
                 _menuDialog.hide(null);
                 if(_gameModel.isFirstRun())
                 {
-                    _eventManager.Dispatch(EventType.RestartNeeded);
+                    startGame();
                 }
                 else {
                     _confirmationPopup.show(_gameStage, null);
@@ -156,7 +167,8 @@ public class UIView {
         menuDialogLayout.add(_quitButton);
         menuDialogLayout.setFillParent(true);
         _menuDialog.addActor(menuDialogLayout);
-        _confirmationPopup.setPosition((GameConfig.SCREEN_WIDTH - _confirmationPopup.getBackground().getMinWidth()) / 2, (GameConfig.SCREEN_HEIGHT - _confirmationPopup.getBackground().getMinHeight()) / 2);        Table confirmationPopupLayout = new Table();
+        _confirmationPopup.setPosition((GameConfig.SCREEN_WIDTH - _confirmationPopup.getBackground().getMinWidth()) / 2, (GameConfig.SCREEN_HEIGHT - _confirmationPopup.getBackground().getMinHeight()) / 2);
+        Table confirmationPopupLayout = new Table();
         confirmationPopupLayout.row().padTop(300f);
         confirmationPopupLayout.add(_yesConfirmationPopupButton).padRight(50f);
         confirmationPopupLayout.add(_noConfirmationPopupButton).padLeft(50f);
@@ -177,6 +189,7 @@ public class UIView {
         float scale = (gameStage.getWidth()-30)/_helpDialog.getBackground().getMinWidth();
         _helpDialog.getBackground().setMinHeight(scale*_helpDialog.getBackground().getMinHeight());
         _helpDialog.getBackground().setMinWidth(scale*_helpDialog.getBackground().getMinWidth());
+        _tutorialDialog.setPosition((GameConfig.SCREEN_WIDTH - _tutorialDialog.getBackground().getMinWidth()) / 2, (GameConfig.SCREEN_HEIGHT - _tutorialDialog.getBackground().getMinHeight()) / 2);
         InitUIView();
     }
 
@@ -198,6 +211,16 @@ public class UIView {
             _menuDialog.hide();
         }
 
+    }
+
+    private void startGame()
+    {
+        _eventManager.Dispatch(EventType.RestartNeeded);
+    }
+
+    public void showTutorial()
+    {
+        _tutorialDialog.show(_gameStage,null);
     }
 
     private void InitUIView()

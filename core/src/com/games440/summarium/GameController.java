@@ -1,5 +1,8 @@
 package com.games440.summarium;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
+
 import javax.inject.Inject;
 
 public class GameController{
@@ -9,7 +12,7 @@ public class GameController{
     public GameModel _gameModel;
 
 
-    public GameController()
+    public GameController(Preferences playerPrefs)
     {
         DaggerContainer.getDaggerBinder().inject(this);
         _eventManager.Subscribe(EventType.Click,new EventListener(){
@@ -19,10 +22,13 @@ public class GameController{
                 SoundManager.getSoundManager().PlaySound(SoundType.Click);
             }
         });
+        final Preferences finalPlayerPrefs = playerPrefs;
         _eventManager.Subscribe(EventType.RestartNeeded,new EventListener(){
             @Override
             public void HandleEvent() {
-                _gameModel.RestartModel();
+                if(!finalPlayerPrefs.getBoolean(GameConfig.isFirstLaunchEverKey,true)) {
+                    _gameModel.RestartModel();
+                }
             }
         });
         _eventManager.Subscribe(EventType.AimChanged,new EventListener(){

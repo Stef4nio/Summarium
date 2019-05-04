@@ -54,9 +54,10 @@ public class WinParticleEffect {
                 @Override
                 public void run() {
                     _fireworks[finalI].start();
+                    SoundManager.getSoundManager().PlayFireworkSound(_rnd.nextInt(4));
                     _fireworks[finalI].setPositionToEmitter(0,GameConfig.SCREEN_WIDTH/2+_rnd.nextInt(800)-400,GameConfig.SCREEN_HEIGHT/2+400+_rnd.nextInt(500)-250);
                 }
-            },750-_rnd.nextInt(500),3000-_rnd.nextInt(1000));
+            },100+_rnd.nextInt(900),2000+_rnd.nextInt(2000));
         }
     }
 }

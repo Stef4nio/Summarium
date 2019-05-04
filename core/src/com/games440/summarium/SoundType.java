@@ -7,5 +7,6 @@ public enum SoundType {
     UIClicked,
     LetsPlaySound,
     WinSound,
-    CellClearSound
+    CellClearSound,
+    RowAppearSound
 }

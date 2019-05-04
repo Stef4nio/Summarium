@@ -81,9 +81,14 @@ public class GameView extends ApplicationAdapter {
 		_eventManager.Subscribe(EventType.RestartNeeded,new EventListener(){
 			@Override
 			public void HandleEvent() {
-				if(!PlayerPreferencesContainer.getPlayerPreferences().contains(GameConfig.isFirstLaunchEverKey)||PlayerPreferencesContainer.getPlayerPreferences().getBoolean(GameConfig.isFirstLaunchEverKey)) {
+				/*if(!PlayerPreferencesContainer.getPlayerPreferences().contains(GameConfig.isFirstLaunchEverKey)||PlayerPreferencesContainer.getPlayerPreferences().getBoolean(GameConfig.isFirstLaunchEverKey)) {
 					PlayerPreferencesContainer.getPlayerPreferences().putBoolean(GameConfig.isFirstLaunchEverKey,false);
 					_uiView.showTutorial();
+				}*/
+				if(PlayerPreferencesContainer.isTutorialHasToBeShown())
+				{
+					_uiView.showTutorial();
+					PlayerPreferencesContainer.disableTutorial();
 				}
 			}
 		});

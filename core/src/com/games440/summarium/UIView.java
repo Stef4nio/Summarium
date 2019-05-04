@@ -89,7 +89,12 @@ public class UIView {
         _playButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                _menuDialog.hide();
+                if(PlayerPreferencesContainer.isTutorialHasToBeShown()) {
+                    _menuDialog.hide(null);
+                }else
+                {
+                    _menuDialog.hide();
+                }
                 if(_gameModel.isFirstRun())
                 {
                     startGame();

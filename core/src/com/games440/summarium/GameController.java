@@ -22,11 +22,14 @@ public class GameController{
                 SoundManager.getSoundManager().PlaySound(SoundType.Click);
             }
         });
-        final Preferences finalPlayerPrefs = playerPrefs;
+        //final Preferences finalPlayerPrefs = playerPrefs;
         _eventManager.Subscribe(EventType.RestartNeeded,new EventListener(){
             @Override
             public void HandleEvent() {
-                if(!finalPlayerPrefs.getBoolean(GameConfig.isFirstLaunchEverKey,true)) {
+                /*if(!finalPlayerPrefs.getBoolean(GameConfig.isFirstLaunchEverKey,true)) {
+                    _gameModel.RestartModel();
+                }*/
+                if(!PlayerPreferencesContainer.isTutorialHasToBeShown()) {
                     _gameModel.RestartModel();
                 }
             }

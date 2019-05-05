@@ -239,6 +239,7 @@ public class UIView {
             }
             if (_winDialog.isVisible())
             {
+                _winEffect.stop();
                 _winDialog.hide();
                 return;
             }

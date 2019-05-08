@@ -5,7 +5,6 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -127,7 +126,7 @@ public class GameView extends ApplicationAdapter implements InputProcessor, Appl
 							if(!tempCell.isPreviouslyCleared()) {
 								_cellClearEffect.addEmitterToPoint(tempCell.getCenterX(), tempCell.getCenterY());
 							}
-							tempCell.Draw(gameStage,j,i,false);
+							tempCell.Draw(gameStage,j,i,false,_gameModel.getGameMode());
 							return;
 						}
 					}
@@ -237,9 +236,9 @@ public class GameView extends ApplicationAdapter implements InputProcessor, Appl
 					_gameFieldView[i][j] = new ViewCell(_gameModel.GetGameFieldModel()[i][j]);
 				}
 				if(_gameFieldView[i][j].isChanged()) {
-					_gameFieldView[i][j].Draw(gameStage,j,i,true);
+					_gameFieldView[i][j].Draw(gameStage,j,i,true,_gameModel.getGameMode());
 				}
-				if(_gameModel.isFirstRun())
+				if(_gameModel.isShowTutorial())
 				{
 					_gameFieldView[i][j].FirstTimeAppear(((GameConfig.CELLS_IN_VERTICAL-i)*GameConfig.CELLS_IN_HORIZONTAL+j)/30f,(j==GameConfig.CELLS_IN_HORIZONTAL-1) ,(i==0&&j==GameConfig.CELLS_IN_HORIZONTAL-1),j,i);
 				}

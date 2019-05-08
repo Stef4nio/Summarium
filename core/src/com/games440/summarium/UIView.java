@@ -1,13 +1,10 @@
 package com.games440.summarium;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -73,7 +70,7 @@ public class UIView {
         _menuDialog.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if(!_gameModel.isFirstRun())
+                if(!_gameModel.isShowTutorial())
                 {
                     _menuDialog.hide();
                 }
@@ -95,7 +92,7 @@ public class UIView {
                 {
                     _menuDialog.hide();
                 }
-                if(_gameModel.isFirstRun())
+                if(_gameModel.isShowTutorial())
                 {
                     startGame();
                 }
@@ -105,7 +102,7 @@ public class UIView {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 _menuDialog.hide(null);
-                if(_gameModel.isFirstRun())
+                if(_gameModel.isShowTutorial())
                 {
                     startGame();
                 }
@@ -220,7 +217,7 @@ public class UIView {
 
     public void handleBackButtonClick()
     {
-        if(!_gameModel.isFirstRun()) {
+        if(!_gameModel.isShowTutorial()) {
 
             if (_helpDialog.isVisible()) {
 

@@ -15,6 +15,7 @@ public class ImageSourceConfig {
     private final String CellClearedSelectedBackground = "cell_highlighter2.png";
     private final String TopBar = "top_bar.png";
     private final String[] Numbers = new String[10];
+    private final String[] NegativeNumbers = new String[20];
     private final String[] aimNumbers = new String[10];
     private final Hashtable<ViewCellState,String[]> StateBackgrounds = new Hashtable<ViewCellState, String[]>();
 
@@ -42,11 +43,20 @@ public class ImageSourceConfig {
 
     public Image getNumber(int number)
     {
-        if(number>9||number<0)
+        /*if(number>9||number<0)
         {
             return null;
-        }
-        return new Image(new Texture(Gdx.files.internal(Numbers[number])));
+        }*/
+        return new Image(new Texture(Gdx.files.internal(Numbers[number-1])));
+    }
+
+    public Image getNegativeNumber(int number)
+    {
+        /*if(number>9||number<0)
+        {
+            return null;
+        }*/
+        return new Image(new Texture(Gdx.files.internal(NegativeNumbers[number+9])));
     }
 
     public Image getAimNumber(int number)
@@ -71,7 +81,11 @@ public class ImageSourceConfig {
         StateBackgrounds.put(ViewCellState.Selected, new String[]{CellSelectedBackground,CellClearedSelectedBackground});
         for(int i = 0; i<Numbers.length;i++)
         {
-            Numbers[i] = "Numbers/"+Integer.toString(i)+".png";
+            Numbers[i] = "Numbers/"+Integer.toString(i+1)+".png";
+        }
+        for(int i = 0; i<NegativeNumbers.length;i++)
+        {
+            NegativeNumbers[i] = "NegativeModeNumbers/"+Integer.toString(i-9)+".png";
         }
         for(int i = 0; i<aimNumbers.length;i++)
         {

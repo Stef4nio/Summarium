@@ -23,6 +23,7 @@ public class ModelCell implements IModelCellReadonly {
         return tempChanged;
     }
 
+
     public void increaseOffsetBy(int offset)
     {
         _offset+=offset;

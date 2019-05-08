@@ -54,111 +54,132 @@ WinDialog
   index: -1
 
 UISkin3.png
-size: 1676,1674
+size: 1824,1824
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
 No
   rotate: false
-  xy: 1203, 1308
+  xy: 1203, 309
   size: 342, 135
   orig: 342, 135
   offset: 0, 0
   index: -1
 Ok
   rotate: false
-  xy: 1228, 1538
+  xy: 1203, 172
   size: 342, 135
   orig: 342, 135
   offset: 0, 0
   index: -1
 Yes
   rotate: false
-  xy: 661, 900
+  xy: 1441, 1576
   size: 342, 135
   orig: 342, 135
   offset: 0, 0
   index: -1
 left arrow
   rotate: false
-  xy: 1203, 1052
+  xy: 1547, 190
   size: 168, 254
   orig: 168, 254
   offset: 0, 0
   index: -1
 right arrow
   rotate: false
-  xy: 1373, 1052
+  xy: 1416, 1224
   size: 168, 254
   orig: 168, 254
   offset: 0, 0
   index: -1
 MenuBgHorizontal
   rotate: false
-  xy: 1, 802
+  xy: 1, 116
   size: 658, 871
   orig: 658, 871
   offset: 0, 0
   index: -1
 Mode
   rotate: false
-  xy: 1, 687
+  xy: 874, 1710
   size: 565, 113
   orig: 565, 113
   offset: 0, 0
   index: -1
 Play
   rotate: false
-  xy: 568, 687
+  xy: 1, 1
   size: 565, 113
   orig: 565, 113
   offset: 0, 0
   index: -1
 Quit
   rotate: false
-  xy: 661, 1560
+  xy: 874, 1595
   size: 565, 113
   orig: 565, 113
   offset: 0, 0
   index: -1
 Restart
   rotate: false
-  xy: 661, 1445
+  xy: 874, 1480
   size: 565, 113
   orig: 565, 113
   offset: 0, 0
   index: -1
+Toggle-left
+  rotate: false
+  xy: 1441, 1713
+  size: 370, 110
+  orig: 370, 110
+  offset: 0, 0
+  index: -1
+Toggle-right
+  rotate: false
+  xy: 1203, 446
+  size: 370, 110
+  orig: 370, 110
+  offset: 0, 0
+  index: -1
+newModeBg
+  rotate: false
+  xy: 1, 989
+  size: 871, 834
+  orig: 871, 834
+  offset: 0, 0
+  index: -1
 default
   rotate: false
-  xy: 1, 173
+  xy: 1203, 558
   size: 512, 512
   orig: 512, 512
   offset: 0, 0
   index: -1
 dimm
   rotate: false
-  xy: 1135, 75
+  xy: 661, 27
   size: 540, 960
   orig: 540, 960
   offset: 0, 0
   index: -1
 help_about
   rotate: false
-  xy: 661, 1037
+  xy: 874, 1072
   size: 540, 406
   orig: 540, 406
   offset: 0, 0
   index: -1
 help_button
   rotate: false
-  xy: 160, 14
+  xy: 1362, 13
   size: 157, 157
   orig: 157, 157
   offset: 0, 0
   index: -1
 menu_button
   rotate: false
-  xy: 1, 14
+  xy: 1203, 13
   size: 157, 157
   orig: 157, 157
   offset: 0, 0

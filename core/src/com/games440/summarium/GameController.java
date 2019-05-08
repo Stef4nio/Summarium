@@ -40,6 +40,12 @@ public class GameController{
                 _gameModel.setAim(param);
             }
         });
+        _eventManager.Subscribe(EventType.GameModeChanged,new GameModeChangeListener(){
+            @Override
+            public void HandleEvent(GameMode gameMode) {
+                _gameModel.setGameMode(gameMode);
+            }
+        });
         _eventManager.Subscribe(EventType.GameStateChanged, new GameStateChangeListener(){
             @Override
             public void HandleEvent(GameState gameState) {

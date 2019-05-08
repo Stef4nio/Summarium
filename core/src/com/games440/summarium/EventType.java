@@ -8,5 +8,6 @@ public enum EventType {
     GameStateChanged,
     ClearCell,
     MotionEnded,
-    PlayerWon
+    PlayerWon,
+    GameModeChanged
 }

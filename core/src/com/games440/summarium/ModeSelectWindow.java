@@ -3,10 +3,9 @@ package com.games440.summarium;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -21,14 +20,17 @@ public class ModeSelectWindow {
     private ImageButton _leftArrowButton;
     private ImageButton _rightArrowButton;
     private ImageButton _modeSelectConfirmButton;
+    private CheckBox _gameModeCheckBox;
     private Image _modeSelectBackgroundImage;
     private Stack _modeStack;
+    private GameMode _tempGameMode;
+    private GameMode _currGameMode;
     private int _tempAim;
     private int _currAim;
     @Inject
     EventManager _eventManager;
     @Inject
-    GameModel _gameModel;
+    IGameModelReadonly _gameModel;
 
     public ModeSelectWindow() {
         DaggerContainer.getDaggerBinder().inject(this);
@@ -36,8 +38,11 @@ public class ModeSelectWindow {
         _modeStack = new Stack();
         _currAim = _gameModel.GetAim();
         _tempAim = _currAim;
+        _currGameMode = _gameModel.getGameMode();
+        _tempGameMode = _currGameMode;
         _leftArrowButton = new ImageButton(_uiSkin, "button_left_arrow");
         _rightArrowButton = new ImageButton(_uiSkin, "button_right_arrow");
+        _gameModeCheckBox = new CheckBox(null,_uiSkin,"checkbox_mode");
         _modeSelectConfirmButton = new ImageButton(_uiSkin, "button_ok");
         _modeSelectBackgroundImage = new Image(new Texture("circle.png"));
         _modeSelectDialog = new UIDialog("", _uiSkin, "window_mode");
@@ -47,6 +52,8 @@ public class ModeSelectWindow {
         modeChooseDialogLayout.add(_leftArrowButton);
         modeChooseDialogLayout.add(_modeStack).padLeft(50f).padRight(50f);
         modeChooseDialogLayout.add(_rightArrowButton);
+        modeChooseDialogLayout.row();
+        modeChooseDialogLayout.add(_gameModeCheckBox).colspan(3).center().padTop(50);
         modeChooseDialogLayout.row();
         modeChooseDialogLayout.add(_modeSelectConfirmButton).colspan(3).center().padTop(50);
         modeChooseDialogLayout.setFillParent(true);
@@ -59,7 +66,12 @@ public class ModeSelectWindow {
                 if(_tempAim!=_currAim) {
                     _currAim = _tempAim;
                     _eventManager.Dispatch(EventType.AimChanged, _currAim);
-                }else if(_gameModel.isFirstRun())
+                }else if(_tempGameMode!=_currGameMode)
+                {
+                    _currGameMode = _tempGameMode;
+                    _eventManager.Dispatch(EventType.GameModeChanged,_currGameMode);
+                }
+                else if(_gameModel.isShowTutorial())
                 {
                     _eventManager.Dispatch(EventType.RestartNeeded);
                 }
@@ -80,6 +92,19 @@ public class ModeSelectWindow {
                 _tempAim+= _tempAim+1<=GameConfig.MAX_AIM?1:0;
                 updateModeSelectWindow();
                 playUIClickSound();
+            }
+        });
+        _gameModeCheckBox.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                playUIClickSound();
+                if(_gameModeCheckBox.isChecked())
+                {
+                    _tempGameMode = GameMode.PlusMinusGameMode;
+                }else
+                {
+                    _tempGameMode = GameMode.PlusGameMode;
+                }
             }
         });
     }

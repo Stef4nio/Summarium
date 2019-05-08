@@ -155,7 +155,7 @@ public class ViewCell{
     }
 
 
-    public void Draw(Stage gameStage,float modelX, float modelY, boolean drawNumber)
+    public void Draw(Stage gameStage,float modelX, float modelY, boolean drawNumber, GameMode mode)
     {
         int value = 0;
         ViewCellState state = _modelCell.GetState();
@@ -168,7 +168,11 @@ public class ViewCell{
         border.remove();
         if(drawNumber)
         {
-            aimImage = ImageSourceConfig.getImageSourceConfig().getNumber(value);
+            if(mode == GameMode.PlusGameMode) {
+                aimImage = ImageSourceConfig.getImageSourceConfig().getNumber(value);
+            }else {
+                aimImage = ImageSourceConfig.getImageSourceConfig().getNegativeNumber(value);
+            }
         }
         isPreviouslyCleared = isCurrentlyCleared;
         isCurrentlyCleared = _modelCell.isCleared();

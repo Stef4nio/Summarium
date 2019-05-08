@@ -12,12 +12,18 @@ public class GameModel implements IGameModelReadonly {
     private ModelCell[][] _gameFieldModel = new ModelCell[GameConfig.CELLS_IN_VERTICAL][GameConfig.CELLS_IN_HORIZONTAL];
     private List<ModelCell> _selectedCells;
     private int _aimValue = 10;
+    private GameMode _gameMode = GameMode.PlusGameMode;
     private boolean isWon = false;
-    private boolean isFirstRun;
+    private boolean showTutorial;
 
     @Override
     public int GetAim() {
         return _aimValue;
+    }
+
+    @Override
+    public GameMode getGameMode() {
+        return _gameMode;
     }
 
     public void setAim(int newAim)
@@ -34,13 +40,13 @@ public class GameModel implements IGameModelReadonly {
         _eventManager = eventManager;
         _stateManager = stateManager;
         _randomManager = randomManager;
-        isFirstRun = true;
+        showTutorial = true;
         _selectedCells = new LinkedList<ModelCell>();
         for(int i = 0; i<GameConfig.CELLS_IN_VERTICAL;i++)
         {
             for(int j = 0; j<GameConfig.CELLS_IN_HORIZONTAL;j++)
             {
-                _gameFieldModel[i][j] = ModelCellFactory.getModelCell(_randomManager.getRandomNumber(_aimValue));
+                _gameFieldModel[i][j] = ModelCellFactory.getModelCell(_randomManager.getRandomNumber(_aimValue,_gameMode==GameMode.PlusGameMode?false:true));
             }
         }
     }
@@ -54,19 +60,19 @@ public class GameModel implements IGameModelReadonly {
             {
                 if (tempCell.GetState() == ViewCellState.Idle) {
                     _selectedCells.add(tempCell);
-                    if (getSumOfSelectedCells() > _aimValue) {
+                    /*if (getSumOfSelectedCells() > _aimValue) {
                         deselectAllSelectedCells();
                         _selectedCells.add(tempCell);
-                    }
+                    }*/
                     tempCell.SetState(ViewCellState.Selected);
-                } else if (tempCell.GetState() == ViewCellState.Selected) {
+                } else if (tempCell.GetState() == ViewCellState.Selected && getNeighboursAmount(tempCell)!=2) {
                     tempCell.SetState(ViewCellState.Idle);
                     _selectedCells.remove(tempCell);
-                    for (int i = 0; i < _selectedCells.size() && _selectedCells.size() > 1; i++) {
+                    /*for (int i = 0; i < _selectedCells.size() && _selectedCells.size() > 1; i++) {
                         if (!isInTheBounds(_selectedCells.get(i))) {
                             deselectAllSelectedCells();
                         }
-                    }
+                    }*/
                 }
 
                 if (!_selectedCells.isEmpty()) {
@@ -107,26 +113,26 @@ public class GameModel implements IGameModelReadonly {
     }
 
     @Override
-    public boolean isFirstRun()
+    public boolean isShowTutorial()
     {
-        return isFirstRun;
+        return showTutorial;
     }
 
     public void RestartModel()
     {
-        isFirstRun = true;
+        showTutorial = true;
         _selectedCells.clear();
         isWon = false;
         for(int i = 0; i<GameConfig.CELLS_IN_VERTICAL;i++)
         {
             for(int j = 0; j<GameConfig.CELLS_IN_HORIZONTAL;j++)
             {
-                _gameFieldModel[i][j].Refresh(_randomManager.getRandomNumber(_aimValue));
+                _gameFieldModel[i][j].Refresh(_randomManager.getRandomNumber(_aimValue,_gameMode==GameMode.PlusGameMode?false:true));
             }
         }
         _stateManager.ChangeState(GameState.Idle);
         _eventManager.Dispatch(EventType.ModelChanged);
-        isFirstRun = false;
+        showTutorial = false;
     }
 
     private void CompressModel()
@@ -180,7 +186,7 @@ public class GameModel implements IGameModelReadonly {
         }while (changes!=0);
         for (ModelCell aColumn : column) {
             if (aColumn.GetValue() == 0) {
-                aColumn.setNewValue(_randomManager.getRandomNumber(_aimValue));
+                aColumn.setNewValue(_randomManager.getRandomNumber(_aimValue,_gameMode==GameMode.PlusGameMode?false:true));
             }
         }
         return column;
@@ -230,6 +236,36 @@ public class GameModel implements IGameModelReadonly {
             }
         }
         return false;
+    }
+
+    private int getNeighboursAmount(ModelCell cell)
+    {
+        List<ModelCell> modelCellsToCheck = new LinkedList<ModelCell>();
+        int amount = 0;
+        int cellY = getModelCellY(cell);
+        int cellX = getModelCellX(cell);
+        if(cellY+1<GameConfig.CELLS_IN_VERTICAL) {
+            modelCellsToCheck.add(_gameFieldModel[cellY+1][cellX]);
+        }
+        if(cellY-1>=0) {
+            modelCellsToCheck.add(_gameFieldModel[cellY-1][cellX]);
+        }
+        if(cellX-1>=0)
+        {
+            modelCellsToCheck.add(_gameFieldModel[cellY][cellX-1]);
+        }
+        if(cellX+1<GameConfig.CELLS_IN_HORIZONTAL)
+        {
+            modelCellsToCheck.add(_gameFieldModel[cellY][cellX+1]);
+        }
+        for(ModelCell tempCell:modelCellsToCheck)
+        {
+            if(_selectedCells.contains(tempCell))
+            {
+                amount++;
+            }
+        }
+        return amount;
     }
 
     private boolean isWon()
@@ -286,5 +322,11 @@ public class GameModel implements IGameModelReadonly {
     @Override
     public IModelCellReadonly[][] GetGameFieldModel() {
         return _gameFieldModel;
+    }
+
+    public void setGameMode(GameMode gameMode) {
+        //showTutorial = true;
+        _gameMode = gameMode;
+        RestartModel();
     }
 }

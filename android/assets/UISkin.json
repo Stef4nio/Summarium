@@ -12,6 +12,13 @@
 		"a": 0.49666667
 	}
 },
+"com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle": {
+	"checkbox_mode": {
+		"checkboxOn": "Toggle-right",
+		"checkboxOff": "Toggle-left",
+		"font": "default"
+	}
+},
 "com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle": {
 	"button_play": {
 		"imageUp": "Play"
@@ -64,7 +71,7 @@
 		"stageBackground": "dimm"
 	},
 	"window_mode": {
-		"background": "ModeSelectWindow",
+		"background": "newModeBg",
 		"titleFont": "default",
 		"stageBackground": "dimm"
 	},

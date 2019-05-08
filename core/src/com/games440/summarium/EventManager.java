@@ -42,10 +42,11 @@ public class EventManager {
         }
     }
 
-    public void DispatchAimChange(int deltaAim)
+    public void Dispatch(EventType type,GameMode mode)
     {
-        for (IEventListener listener : _listeners.get(EventType.AimChanged)) {
-            listener.HandleEvent(deltaAim);
+        for (IEventListener listener : _listeners.get(type)) {
+            ((GameModeChangeListener)listener).HandleEvent(mode);
         }
     }
+
 }

@@ -7,8 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
-import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
-import com.badlogic.gdx.scenes.scene2d.actions.ParallelAction;
+import com.badlogic.gdx.scenes.scene2d.actions.RepeatAction;
 import com.badlogic.gdx.scenes.scene2d.actions.ScaleToAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -49,10 +48,12 @@ public class ViewCell{
                 _eventManager.Dispatch(EventType.Click,_modelCell.GetId());
             }
         });
+        
         _borderWidth = border.getDrawable().getMinWidth()*border.getScaleX();
         _borderHeight = border.getDrawable().getMinHeight()*border.getScaleY();
         _stateImageWidth = stateImage.getDrawable().getMinWidth()*stateImage.getScaleX();
         _stateImageHeight = stateImage.getDrawable().getMinHeight()*stateImage.getScaleY();
+
     }
 
     public void Animate()
@@ -76,21 +77,17 @@ public class ViewCell{
 
     public void FirstTimeAppear(float delay,boolean isLastInRow, boolean isLast, int modelX, int modelY)
     {
+        aimImage.setOrigin(_borderWidth/2,_borderHeight/2);
+        stateImage.setOrigin(_borderWidth/2,_borderHeight/2);
+        border.setOrigin(_borderWidth/2,_borderHeight/2);
         SequenceAction sequence = new SequenceAction();
         DelayAction delayAction = new DelayAction(delay);
         sequence.addAction(delayAction);
         aimImage.setScale(0);
-        ParallelAction parallelAction = new ParallelAction();
-        MoveToAction moveToAction = new MoveToAction();
-        moveToAction.setPosition(getCenterX(),getCenterY());
-        moveToAction.setReverse(true);
-        moveToAction.setDuration(0.3f);
         ScaleToAction scaleAction = new ScaleToAction();
         scaleAction.setScale(1);
         scaleAction.setDuration(0.3f);
-        parallelAction.addAction(moveToAction);
-        parallelAction.addAction(scaleAction);
-        sequence.addAction(parallelAction);
+        sequence.addAction(scaleAction);
         if(isLast)
         {
             sequence.addAction(new Action() {
@@ -117,34 +114,20 @@ public class ViewCell{
         delayAction = new DelayAction(delay);
         sequence.addAction(delayAction);
         stateImage.setScale(0);
-        parallelAction = new ParallelAction();
-        moveToAction = new MoveToAction();
-        moveToAction.setPosition(getCenterX(),getCenterY());
-        moveToAction.setReverse(true);
-        moveToAction.setDuration(0.3f);
         scaleAction = new ScaleToAction();
         scaleAction.setScale(1);
         scaleAction.setDuration(0.3f);
-        parallelAction.addAction(moveToAction);
-        parallelAction.addAction(scaleAction);
-        sequence.addAction(parallelAction);
+        sequence.addAction(scaleAction);
         stateImage.addAction(sequence);
 
         sequence = new SequenceAction();
         delayAction = new DelayAction(delay);
         sequence.addAction(delayAction);
         border.setScale(0);
-        parallelAction = new ParallelAction();
-        moveToAction = new MoveToAction();
-        moveToAction.setPosition(getCenterX(),getCenterY());
-        moveToAction.setReverse(true);
-        moveToAction.setDuration(0.3f);
         scaleAction = new ScaleToAction();
         scaleAction.setScale(1);
         scaleAction.setDuration(0.3f);
-        parallelAction.addAction(moveToAction);
-        parallelAction.addAction(scaleAction);
-        sequence.addAction(parallelAction);
+        sequence.addAction(scaleAction);
         border.addAction(sequence);
     }
 
@@ -161,6 +144,7 @@ public class ViewCell{
 
     public void Draw(Stage gameStage,float modelX, float modelY, boolean drawNumber, GameMode mode)
     {
+
         int value = 0;
         ViewCellState state = _modelCell.GetState();
         if(drawNumber)
@@ -179,6 +163,10 @@ public class ViewCell{
         isPreviouslyCleared = isCurrentlyCleared;
         isCurrentlyCleared = _modelCell.isCleared();
         stateImage = ImageSourceConfig.getImageSourceConfig().getCellBackgroundByState(state,_modelCell.isCleared());
+        if(state == ViewCellState.Selected)
+        {
+           makeSelection();
+        }
         border.setPosition(modelX*(_borderWidth+GameConfig.CELL_X_PADDING)+ GameConfig.TABLE_X_OFFSET,
                 modelY*(_borderHeight+GameConfig.CELL_Y_PADDING)+GameConfig.TABLE_Y_OFFSET);
         stateImage.setPosition(modelX*(_borderWidth+GameConfig.CELL_X_PADDING)+ GameConfig.TABLE_X_OFFSET +(_borderWidth-_stateImageWidth)/2,
@@ -219,6 +207,35 @@ public class ViewCell{
     {
         //return (modelY*(_borderHeight*border.getScaleY()+GameConfig.CELL_Y_PADDING)+GameConfig.TABLE_Y_OFFSET+_borderHeight/2f);
         return stateImage.getY()+_stateImageHeight/2;
+    }
+
+    public void makeSelection()
+    {
+        aimImage.setOrigin(_borderWidth/2,_borderHeight/2);
+        aimImage.addAction(getNewSelectedAction());
+    }
+
+    private RepeatAction getNewSelectedAction()
+    {
+        RepeatAction selectedAction = new RepeatAction();
+        ScaleToAction scaleOutAction = new ScaleToAction();
+        ScaleToAction scaleInAction = new ScaleToAction();
+        SequenceAction singleSelectedAction = new SequenceAction();
+        aimImage.setOrigin(getCenterX(),getCenterY());
+        scaleOutAction.setScale(0.8f);
+        scaleInAction.setScale(1f);
+        scaleInAction.setDuration(0.5f);
+        scaleOutAction.setDuration(0.5f);
+        singleSelectedAction.addAction(scaleOutAction);
+        singleSelectedAction.addAction(scaleInAction);
+        selectedAction.setCount(RepeatAction.FOREVER);
+        selectedAction.setAction(singleSelectedAction);
+        return selectedAction;
+    }
+
+    public boolean isSelected()
+    {
+        return _modelCell.GetState()==ViewCellState.Selected;
     }
 
     public void removeCell() {

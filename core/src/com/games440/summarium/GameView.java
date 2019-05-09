@@ -10,8 +10,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 
@@ -32,11 +35,13 @@ public class GameView extends ApplicationAdapter implements InputProcessor, Appl
 	ModeSelectWindow _modeSelectWindow;
 	private GameController _controller;
 	private ViewCell[][] _gameFieldView;
+	private java.util.List<ViewCell> _selectedCells;
 	private UIView _uiView;
 
     public GameView()
     {
         _gameFieldView = new ViewCell[GameConfig.CELLS_IN_VERTICAL][GameConfig.CELLS_IN_HORIZONTAL];
+        _selectedCells = new ArrayList<ViewCell>();
     }
 
 
@@ -145,6 +150,7 @@ public class GameView extends ApplicationAdapter implements InputProcessor, Appl
 				_stateManager.ChangeState(GameState.Adding);
 			}
 		});
+
 		_eventManager.Subscribe(EventType.GameStateChanged,new GameStateChangeListener(){
 			@Override
 			public void HandleEvent(GameState gameState) {
@@ -260,6 +266,7 @@ public class GameView extends ApplicationAdapter implements InputProcessor, Appl
 				}
 			}
 		}
+
 	}
 
 	@Override

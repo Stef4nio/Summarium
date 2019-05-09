@@ -53,34 +53,26 @@ public class GameModel implements IGameModelReadonly {
 
     public void HandleInput(int id)
     {
-        if(_stateManager.getGameState() == GameState.Idle) {
+        ModelCell tempCell = getModelCellById(id);
 
-            ModelCell tempCell = getModelCellById(id);
+        if(_stateManager.getGameState() == GameState.Idle) {
             if (_selectedCells.isEmpty() || isInTheBounds(tempCell) || _selectedCells.contains(tempCell))
             {
                 if (tempCell.GetState() == ViewCellState.Idle) {
                     _selectedCells.add(tempCell);
-                    /*if (getSumOfSelectedCells() > _aimValue) {
-                        deselectAllSelectedCells();
-                        _selectedCells.add(tempCell);
-                    }*/
                     tempCell.SetState(ViewCellState.Selected);
                 } else if (tempCell.GetState() == ViewCellState.Selected) {
                     tempCell.SetState(ViewCellState.Idle);
                     _selectedCells.remove(tempCell);
                     SelectionHelper.CheckSelection(_gameFieldModel);
-                    //deselectAllSelectedCells();
-                    /*for (int i = 0; i < _selectedCells.size() && _selectedCells.size() > 1; i++) {
-                        if (!isInTheBounds(_selectedCells.get(i))) {
-                            deselectAllSelectedCells();
-                        }
-                    }*/
                     for (int i=0;i<_gameFieldModel.length;i++) {
                         for (int j = 0; j < _gameFieldModel[i].length; j++) {
                             if(_gameFieldModel[i][j].selectionValue == 1)
                             {
-                                _selectedCells.add(_gameFieldModel[i][j]);
-                                _gameFieldModel[i][j].SetState(ViewCellState.Selected);
+                                if(!_selectedCells.contains(_gameFieldModel[i][j])) {
+                                    _selectedCells.add(_gameFieldModel[i][j]);
+                                    _gameFieldModel[i][j].SetState(ViewCellState.Selected);
+                                }
                             }else
                             {
                                 _selectedCells.remove(_gameFieldModel[i][j]);
@@ -92,6 +84,7 @@ public class GameModel implements IGameModelReadonly {
 
                 if (!_selectedCells.isEmpty()) {
                     if (getSumOfSelectedCells() == _aimValue) {
+                        _eventManager.Dispatch(EventType.RefreshCell, tempCell.GetId());
                         for (ModelCell cell : _selectedCells) {
                             cell.Clear();
                             _eventManager.Dispatch(EventType.ClearCell, cell.GetId());

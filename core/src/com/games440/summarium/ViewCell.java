@@ -142,6 +142,28 @@ public class ViewCell{
         return _modelCell.GetId();
     }
 
+    public void Refresh(Stage gameStage,float modelX, float modelY, GameMode mode)
+    {
+        int value = 0;
+        ViewCellState state = _modelCell.GetState();
+        value = _modelCell.GetValue();
+        removeCell();
+        if(mode == GameMode.PlusGameMode) {
+            aimImage = ImageSourceConfig.getImageSourceConfig().getNumber(value);
+        }else {
+            aimImage = ImageSourceConfig.getImageSourceConfig().getNegativeNumber(value);
+        }
+        stateImage = ImageSourceConfig.getImageSourceConfig().getCellBackgroundByState(state,_modelCell.isCleared());
+        border.setPosition(modelX*(_borderWidth+GameConfig.CELL_X_PADDING)+ GameConfig.TABLE_X_OFFSET,
+                modelY*(_borderHeight+GameConfig.CELL_Y_PADDING)+GameConfig.TABLE_Y_OFFSET);
+        stateImage.setPosition(modelX*(_borderWidth+GameConfig.CELL_X_PADDING)+ GameConfig.TABLE_X_OFFSET +(_borderWidth-_stateImageWidth)/2,
+                modelY*(_borderHeight+GameConfig.CELL_Y_PADDING)+GameConfig.TABLE_Y_OFFSET+(_borderHeight-_stateImageHeight)/2);
+        aimImage.setPosition(stateImage.getX(),stateImage.getY());
+        gameStage.addActor(stateImage);
+        gameStage.addActor(aimImage);
+        gameStage.addActor(border);
+    }
+
 
     public void Draw(Stage gameStage,float modelX, float modelY, boolean drawNumber, GameMode mode)
     {

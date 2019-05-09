@@ -124,6 +124,22 @@ public class GameView extends ApplicationAdapter implements InputProcessor, Appl
 				}
 			}
 		});
+		_eventManager.Subscribe(EventType.RefreshCell, new EventListener(){
+			@Override
+			public void HandleEvent(int param) {
+				for(int i = 0;i<_gameFieldView.length;i++)
+				{
+					for(int j = 0;j<_gameFieldView[i].length;j++)
+					{
+						if(param == _gameFieldView[i][j].getId())
+						{
+							_gameFieldView[i][j].Refresh(gameStage,j,i,_gameModel.getGameMode());
+							return;
+						}
+					}
+				}
+			}
+		});
 		_eventManager.Subscribe(EventType.ClearCell,new EventListener(){
 			@Override
 			public void HandleEvent(int param) {

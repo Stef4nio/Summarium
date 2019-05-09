@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
 import com.badlogic.gdx.scenes.scene2d.actions.RepeatAction;
+import com.badlogic.gdx.scenes.scene2d.actions.RotateByAction;
 import com.badlogic.gdx.scenes.scene2d.actions.ScaleToAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -48,7 +49,7 @@ public class ViewCell{
                 _eventManager.Dispatch(EventType.Click,_modelCell.GetId());
             }
         });
-        
+
         _borderWidth = border.getDrawable().getMinWidth()*border.getScaleX();
         _borderHeight = border.getDrawable().getMinHeight()*border.getScaleY();
         _stateImageWidth = stateImage.getDrawable().getMinWidth()*stateImage.getScaleX();
@@ -218,16 +219,17 @@ public class ViewCell{
     private RepeatAction getNewSelectedAction()
     {
         RepeatAction selectedAction = new RepeatAction();
-        ScaleToAction scaleOutAction = new ScaleToAction();
-        ScaleToAction scaleInAction = new ScaleToAction();
+        RotateByAction rotateLeft = new RotateByAction();
+        RotateByAction rotateRight = new RotateByAction();
+        rotateLeft.setAmount(10);
+        rotateRight.setAmount(-10);
+        rotateLeft.setDuration(0.3f);
+        rotateRight.setDuration(0.3f);
+        aimImage.setRotation(-5);
         SequenceAction singleSelectedAction = new SequenceAction();
         aimImage.setOrigin(getCenterX(),getCenterY());
-        scaleOutAction.setScale(0.8f);
-        scaleInAction.setScale(1f);
-        scaleInAction.setDuration(0.5f);
-        scaleOutAction.setDuration(0.5f);
-        singleSelectedAction.addAction(scaleOutAction);
-        singleSelectedAction.addAction(scaleInAction);
+        singleSelectedAction.addAction(rotateLeft);
+        singleSelectedAction.addAction(rotateRight);
         selectedAction.setCount(RepeatAction.FOREVER);
         selectedAction.setAction(singleSelectedAction);
         return selectedAction;

@@ -8,9 +8,11 @@ public class ModelCell implements IModelCellReadonly {
     private boolean isChanged;
     private boolean isCleared;
     private boolean isNew;
+    public int selectionValue;
 
     public ModelCell(int value, int id) {
         _value = value;
+        selectionValue = 0;
         _id = id;
         _state = ViewCellState.Idle;
         isChanged = true;
@@ -37,6 +39,7 @@ public class ModelCell implements IModelCellReadonly {
 
     public void SetState(ViewCellState state) {
        _state = state;
+       selectionValue = state==ViewCellState.Selected?1:0;
        isChanged = true;
     }
 
@@ -61,6 +64,7 @@ public class ModelCell implements IModelCellReadonly {
         isCleared = true;
         isChanged = false;
         _state = ViewCellState.Idle;
+        selectionValue = 0;
         _value = 0;
     }
 
@@ -69,6 +73,7 @@ public class ModelCell implements IModelCellReadonly {
         _value = newValue;
         isNew = false;
         _state = ViewCellState.Idle;
+        selectionValue = 0;
         isChanged = true;
         isCleared = false;
     }

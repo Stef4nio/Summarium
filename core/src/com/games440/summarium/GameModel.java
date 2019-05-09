@@ -65,14 +65,29 @@ public class GameModel implements IGameModelReadonly {
                         _selectedCells.add(tempCell);
                     }*/
                     tempCell.SetState(ViewCellState.Selected);
-                } else if (tempCell.GetState() == ViewCellState.Selected && getNeighboursAmount(tempCell)!=2) {
+                } else if (tempCell.GetState() == ViewCellState.Selected) {
                     tempCell.SetState(ViewCellState.Idle);
                     _selectedCells.remove(tempCell);
+                    SelectionHelper.CheckSelection(_gameFieldModel);
+                    //deselectAllSelectedCells();
                     /*for (int i = 0; i < _selectedCells.size() && _selectedCells.size() > 1; i++) {
                         if (!isInTheBounds(_selectedCells.get(i))) {
                             deselectAllSelectedCells();
                         }
                     }*/
+                    for (int i=0;i<_gameFieldModel.length;i++) {
+                        for (int j = 0; j < _gameFieldModel[i].length; j++) {
+                            if(_gameFieldModel[i][j].selectionValue == 1)
+                            {
+                                _selectedCells.add(_gameFieldModel[i][j]);
+                                _gameFieldModel[i][j].SetState(ViewCellState.Selected);
+                            }else
+                            {
+                                _selectedCells.remove(_gameFieldModel[i][j]);
+                                _gameFieldModel[i][j].SetState(ViewCellState.Idle);
+                            }
+                        }
+                    }
                 }
 
                 if (!_selectedCells.isEmpty()) {

@@ -31,12 +31,16 @@ public class ViewCell{
     EventManager _eventManager;
 
 
-    public ViewCell(IModelCellReadonly modelCell) {
+    public ViewCell(IModelCellReadonly modelCell, GameMode mode) {
         this._modelCell = modelCell;
         ViewCellState state = _modelCell.GetState();
         int value = _modelCell.GetValue();
         DaggerContainer.getDaggerBinder().inject(this);
-        aimImage = ImageSourceConfig.getImageSourceConfig().getNumber(value);
+        if(mode == GameMode.PlusGameMode) {
+            aimImage = ImageSourceConfig.getImageSourceConfig().getNumber(value);
+        }else {
+            aimImage = ImageSourceConfig.getImageSourceConfig().getNegativeNumber(value);
+        }
         stateImage = ImageSourceConfig.getImageSourceConfig().getCellBackgroundByState(state,_modelCell.isCleared());
         border = ImageSourceConfig.getImageSourceConfig().getCellBorder();
         border.addListener(new ClickListener(){
@@ -163,9 +167,7 @@ public class ViewCell{
         {
             value = _modelCell.GetValue();
         }
-        aimImage.remove();
-        stateImage.remove();
-        border.remove();
+       removeCell();
         if(drawNumber)
         {
             if(mode == GameMode.PlusGameMode) {
@@ -217,5 +219,11 @@ public class ViewCell{
     {
         //return (modelY*(_borderHeight*border.getScaleY()+GameConfig.CELL_Y_PADDING)+GameConfig.TABLE_Y_OFFSET+_borderHeight/2f);
         return stateImage.getY()+_stateImageHeight/2;
+    }
+
+    public void removeCell() {
+        border.remove();
+        stateImage.remove();
+        aimImage.remove();
     }
 }

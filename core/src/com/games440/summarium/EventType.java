@@ -4,7 +4,7 @@ public enum EventType {
     Click,
     ModelChanged,
     RestartNeeded,
-    AimChanged,
+    //AimChanged,
     GameStateChanged,
     ClearCell,
     MotionEnded,

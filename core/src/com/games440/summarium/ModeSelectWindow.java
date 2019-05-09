@@ -63,13 +63,10 @@ public class ModeSelectWindow {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 _modeSelectDialog.hide(null);
-                if(_tempAim!=_currAim) {
+                if(_tempAim!=_currAim||_tempGameMode!=_currGameMode) {
                     _currAim = _tempAim;
-                    _eventManager.Dispatch(EventType.AimChanged, _currAim);
-                }else if(_tempGameMode!=_currGameMode)
-                {
                     _currGameMode = _tempGameMode;
-                    _eventManager.Dispatch(EventType.GameModeChanged,_currGameMode);
+                    _eventManager.Dispatch(EventType.GameModeChanged,_currGameMode,_currAim,_tempGameMode!=_currGameMode,_tempAim!=_currAim);
                 }
                 else if(_gameModel.isShowTutorial())
                 {

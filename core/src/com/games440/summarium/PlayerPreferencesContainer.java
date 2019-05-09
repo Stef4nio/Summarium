@@ -8,7 +8,7 @@ public class PlayerPreferencesContainer {
     private static boolean isInitialized = false;
     private static boolean isTutorialHasToBeShown = true;
 
-    public static Preferences getPlayerPreferences()
+    /*public static Preferences getPlayerPreferences()
     {
         if(isInitialized)
         {
@@ -31,5 +31,5 @@ public class PlayerPreferencesContainer {
     {
         _playerPrefs = playerPrefs;
         isInitialized = true;
-    }
+    }*/
 }

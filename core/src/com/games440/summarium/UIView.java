@@ -19,6 +19,7 @@ public class UIView {
     private UIDialog _confirmationPopup;
     private UIDialog _winDialog;
     private UIDialog _tutorialDialog;
+    private UIDialog _negativeTutorialDialog;
     private ImageButton _yesConfirmationPopupButton;
     private ImageButton _noConfirmationPopupButton;
     private ImageButton _yesWinDialogButton;
@@ -52,6 +53,7 @@ public class UIView {
         _confirmationPopup = new UIDialog("",_uiSkin,"window_confirmationPopup");
         _winDialog = new UIDialog("",_uiSkin,"window_winDialog");
         _tutorialDialog = new UIDialog("",_uiSkin,"window_tutorial");
+        _negativeTutorialDialog = new UIDialog("",_uiSkin,"window_tutorialNegative");
         _playButton = new ImageButton(_uiSkin,"button_play");
         _modeButton = new ImageButton(_uiSkin,"button_mode");
         _restartButton = new ImageButton(_uiSkin,"button_restart");
@@ -83,10 +85,17 @@ public class UIView {
                 startGame();
             }
         });
+        _negativeTutorialDialog.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                _negativeTutorialDialog.hide();
+                startGame();
+            }
+        });
         _playButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if(PlayerPreferencesContainer.isTutorialHasToBeShown()) {
+                if(_gameModel.isShowTutorial()) {
                     _menuDialog.hide(null);
                 }else
                 {
@@ -192,6 +201,7 @@ public class UIView {
         _helpDialog.getBackground().setMinHeight(scale*_helpDialog.getBackground().getMinHeight());
         _helpDialog.getBackground().setMinWidth(scale*_helpDialog.getBackground().getMinWidth());
         _tutorialDialog.setPosition((GameConfig.SCREEN_WIDTH - _tutorialDialog.getBackground().getMinWidth()) / 2, (GameConfig.SCREEN_HEIGHT - _tutorialDialog.getBackground().getMinHeight()) / 2);
+        _negativeTutorialDialog.setPosition((GameConfig.SCREEN_WIDTH - _negativeTutorialDialog.getBackground().getMinWidth()) / 2, (GameConfig.SCREEN_HEIGHT - _negativeTutorialDialog.getBackground().getMinHeight()) / 2);
         InitUIView();
     }
 
@@ -257,7 +267,12 @@ public class UIView {
 
     public void showTutorial()
     {
-        _tutorialDialog.show(_gameStage,null);
+        if(_gameModel.getGameMode() == GameMode.PlusGameMode) {
+            _tutorialDialog.show(_gameStage, null);
+        }else
+        {
+            _negativeTutorialDialog.show(_gameStage,null);
+        }
     }
 
     private void InitUIView()

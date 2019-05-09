@@ -14,7 +14,7 @@ public class GameModel implements IGameModelReadonly {
     private int _aimValue = 10;
     private GameMode _gameMode = GameMode.PlusGameMode;
     private boolean isWon = false;
-    private boolean showTutorial;
+    private boolean _showTutorial;
 
     @Override
     public int GetAim() {
@@ -31,7 +31,7 @@ public class GameModel implements IGameModelReadonly {
         if(_aimValue<=GameConfig.MAX_AIM&&_aimValue>=GameConfig.MIN_AIM)
         {
             _aimValue = newAim;
-            RestartModel();
+            //RestartModel();
         }
     }
 
@@ -40,7 +40,7 @@ public class GameModel implements IGameModelReadonly {
         _eventManager = eventManager;
         _stateManager = stateManager;
         _randomManager = randomManager;
-        showTutorial = true;
+        _showTutorial = true;
         _selectedCells = new LinkedList<ModelCell>();
         for(int i = 0; i<GameConfig.CELLS_IN_VERTICAL;i++)
         {
@@ -115,12 +115,12 @@ public class GameModel implements IGameModelReadonly {
     @Override
     public boolean isShowTutorial()
     {
-        return showTutorial;
+        return _showTutorial;
     }
 
     public void RestartModel()
     {
-        showTutorial = true;
+        _showTutorial = true;
         _selectedCells.clear();
         isWon = false;
         for(int i = 0; i<GameConfig.CELLS_IN_VERTICAL;i++)
@@ -132,7 +132,7 @@ public class GameModel implements IGameModelReadonly {
         }
         _stateManager.ChangeState(GameState.Idle);
         _eventManager.Dispatch(EventType.ModelChanged);
-        showTutorial = false;
+        _showTutorial = false;
     }
 
     private void CompressModel()
@@ -325,8 +325,12 @@ public class GameModel implements IGameModelReadonly {
     }
 
     public void setGameMode(GameMode gameMode) {
-        //showTutorial = true;
+        _showTutorial = true;
         _gameMode = gameMode;
-        RestartModel();
+        //RestartModel();
+    }
+
+    public void setShowTutorial(boolean showTutorial) {
+        _showTutorial = showTutorial;
     }
 }

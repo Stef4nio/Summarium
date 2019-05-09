@@ -46,8 +46,8 @@ public class GameView extends ApplicationAdapter implements InputProcessor, Appl
 		DaggerContainer.getDaggerBinder().inject(this);
 		Gdx.input.setInputProcessor(this);
 		Gdx.input.setCatchBackKey(true);
-		PlayerPreferencesContainer.Initialize(Gdx.app.getPreferences("SummariumPlayerPreferences"));
-		_controller = new GameController(PlayerPreferencesContainer.getPlayerPreferences());
+		//PlayerPreferencesContainer.Initialize(Gdx.app.getPreferences("SummariumPlayerPreferences"));
+		_controller = new GameController(/*PlayerPreferencesContainer.getPlayerPreferences()*/);
 		SoundManager.InitSoundManager();
 		_cellClearEffect = new Particle();
 		_cellClearEffect.load(Gdx.files.internal("ParticleEffects/CellClearEffect/Particle Park Glass.p"),Gdx.files.internal("ParticleEffects/CellClearEffect/"));
@@ -89,16 +89,16 @@ public class GameView extends ApplicationAdapter implements InputProcessor, Appl
 					PlayerPreferencesContainer.getPlayerPreferences().putBoolean(GameConfig.isFirstLaunchEverKey,false);
 					_uiView.showTutorial();
 				}*/
-				if(PlayerPreferencesContainer.isTutorialHasToBeShown())
+				if(_gameModel.isShowTutorial())
 				{
 					_uiView.showTutorial();
-					PlayerPreferencesContainer.disableTutorial();
+					_controller.disableTutorial();
 				}
 			}
 		});
-		_eventManager.Subscribe(EventType.AimChanged,new EventListener(){
+		_eventManager.Subscribe(EventType.GameModeChanged,new GameModeChangeListener(){
 			@Override
-			public void HandleEvent(int param) {
+			public void HandleEvent(GameMode gameMode, int newAim, boolean isModeUpdated, boolean isAimUpdated) {
 				_aimImage.remove();
 				_aimImage = ImageSourceConfig.getImageSourceConfig().getAimNumber(_gameModel.GetAim());
 				_aimImage.setPosition((gameStage.getWidth()-_aimImage.getDrawable().getMinWidth()*_aimImage.getScaleX())/2,_topBar.getY()+(_topBar.getDrawable().getMinHeight()-_aimImage.getDrawable().getMinHeight()*_aimImage.getScaleY())/2);
@@ -111,6 +111,12 @@ public class GameView extends ApplicationAdapter implements InputProcessor, Appl
 					}
 				});
 				gameStage.addActor(_aimImage);
+				if(_gameModel.isShowTutorial())
+				{
+					clearField();
+					_uiView.showTutorial();
+					_controller.disableTutorial();
+				}
 			}
 		});
 		_eventManager.Subscribe(EventType.ClearCell,new EventListener(){
@@ -203,6 +209,16 @@ public class GameView extends ApplicationAdapter implements InputProcessor, Appl
 		_uiView.SetMenuVisibility(true);
 	}
 
+	private void clearField() {
+		for(int i = 0; i< GameConfig.CELLS_IN_VERTICAL;i++) {
+			for (int j = 0; j < GameConfig.CELLS_IN_HORIZONTAL; j++) {
+				if(_gameFieldView[i][j]!=null)
+				{
+					_gameFieldView[i][j].removeCell();
+				}
+			}
+		}
+	}
 
 
 	@Override
@@ -233,7 +249,7 @@ public class GameView extends ApplicationAdapter implements InputProcessor, Appl
 			for(int j = 0; j < GameConfig.CELLS_IN_HORIZONTAL;j++)
 			{
 				if(_gameFieldView[i][j] == null) {
-					_gameFieldView[i][j] = new ViewCell(_gameModel.GetGameFieldModel()[i][j]);
+					_gameFieldView[i][j] = new ViewCell(_gameModel.GetGameFieldModel()[i][j],_gameModel.getGameMode());
 				}
 				if(_gameFieldView[i][j].isChanged()) {
 					_gameFieldView[i][j].Draw(gameStage,j,i,true,_gameModel.getGameMode());

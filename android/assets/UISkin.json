@@ -84,6 +84,11 @@
 		"background": "Tutorial",
 		"titleFont": "default",
 		"stageBackground": "dimm"
+	},
+	"window_tutorialNegative": {
+		"background": "Tutorial_substraction",
+		"titleFont": "default",
+		"stageBackground": "dimm"
 	}
 }
 }

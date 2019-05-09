@@ -18,6 +18,11 @@ public class UIDialog extends Dialog {
             Color color = this.getColor();
             color.a = 0;
             this.setColor(color);
+        }else
+        {
+            Color color = this.getColor();
+            color.a = 1;
+            this.setColor(color);
         }
         this.setVisible(true);
         return super.show(stage, action);

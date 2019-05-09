@@ -12,7 +12,7 @@ public class GameController{
     public GameModel _gameModel;
 
 
-    public GameController(Preferences playerPrefs)
+    public GameController()
     {
         DaggerContainer.getDaggerBinder().inject(this);
         _eventManager.Subscribe(EventType.Click,new EventListener(){
@@ -29,21 +29,26 @@ public class GameController{
                 /*if(!finalPlayerPrefs.getBoolean(GameConfig.isFirstLaunchEverKey,true)) {
                     _gameModel.RestartModel();
                 }*/
-                if(!PlayerPreferencesContainer.isTutorialHasToBeShown()) {
+                if(!_gameModel.isShowTutorial()) {
                     _gameModel.RestartModel();
                 }
             }
         });
-        _eventManager.Subscribe(EventType.AimChanged,new EventListener(){
+        /*_eventManager.Subscribe(EventType.AimChanged,new EventListener(){
             @Override
             public void HandleEvent(int param) {
                 _gameModel.setAim(param);
             }
-        });
+        });*/
         _eventManager.Subscribe(EventType.GameModeChanged,new GameModeChangeListener(){
             @Override
-            public void HandleEvent(GameMode gameMode) {
+            public void HandleEvent(GameMode gameMode, int newAim, boolean isModeUpdated, boolean isAimUpdated) {
                 _gameModel.setGameMode(gameMode);
+                _gameModel.setAim(newAim);
+                if(isModeUpdated||isAimUpdated||!_gameModel.isShowTutorial())
+                {
+                    _gameModel.RestartModel();
+                }
             }
         });
         _eventManager.Subscribe(EventType.GameStateChanged, new GameStateChangeListener(){
@@ -61,5 +66,9 @@ public class GameController{
         });
     }
 
+    public void disableTutorial()
+    {
+        _gameModel.setShowTutorial(false);
+    }
 
 }

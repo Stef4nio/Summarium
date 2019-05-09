@@ -42,10 +42,10 @@ public class EventManager {
         }
     }
 
-    public void Dispatch(EventType type,GameMode mode)
+    public void Dispatch(EventType type,GameMode mode, int newAim, boolean isModeUpdated, boolean isAimUpdated)
     {
         for (IEventListener listener : _listeners.get(type)) {
-            ((GameModeChangeListener)listener).HandleEvent(mode);
+            ((GameModeChangeListener)listener).HandleEvent(mode,newAim,isModeUpdated,isAimUpdated);
         }
     }
 

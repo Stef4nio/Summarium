@@ -11,7 +11,7 @@ public class GameModeChangeListener implements IEventListener {
 
     }
 
-    public void HandleEvent(GameMode gameMode)
+    public void HandleEvent(GameMode gameMode, int newAim, boolean isModeUpdated, boolean isAimUpdated)
     {
 
     }

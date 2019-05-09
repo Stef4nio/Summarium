@@ -13,173 +13,186 @@ help_about_dimmed
   index: -1
 
 UISkin2.png
-size: 1980,1980
+size: 2002,2002
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
 bg-horizontal
   rotate: false
-  xy: 1, 534
+  xy: 1, 556
   size: 871, 658
   orig: 871, 658
   offset: 0, 0
   index: -1
 DialogYesNo
   rotate: false
-  xy: 1001, 1321
-  size: 871, 658
-  orig: 871, 658
-  offset: 0, 0
-  index: -1
-ModeSelectWindow
-  rotate: false
-  xy: 1001, 661
+  xy: 874, 1
   size: 871, 658
   orig: 871, 658
   offset: 0, 0
   index: -1
 Tutorial
   rotate: false
-  xy: 1, 1194
+  xy: 1, 1216
   size: 998, 785
   orig: 998, 785
   offset: 0, 0
   index: -1
-WinDialog
+Tutorial_substraction
   rotate: false
-  xy: 874, 1
-  size: 871, 658
-  orig: 871, 658
+  xy: 1001, 661
+  size: 998, 1340
+  orig: 998, 1340
   offset: 0, 0
   index: -1
 
 UISkin3.png
-size: 1824,1824
+size: 1956,1956
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-No
-  rotate: false
-  xy: 1203, 309
-  size: 342, 135
-  orig: 342, 135
-  offset: 0, 0
-  index: -1
-Ok
-  rotate: false
-  xy: 1203, 172
-  size: 342, 135
-  orig: 342, 135
-  offset: 0, 0
-  index: -1
-Yes
-  rotate: false
-  xy: 1441, 1576
-  size: 342, 135
-  orig: 342, 135
-  offset: 0, 0
-  index: -1
-left arrow
-  rotate: false
-  xy: 1547, 190
-  size: 168, 254
-  orig: 168, 254
-  offset: 0, 0
-  index: -1
-right arrow
-  rotate: false
-  xy: 1416, 1224
-  size: 168, 254
-  orig: 168, 254
-  offset: 0, 0
-  index: -1
 MenuBgHorizontal
   rotate: false
-  xy: 1, 116
+  xy: 874, 424
   size: 658, 871
   orig: 658, 871
   offset: 0, 0
   index: -1
 Mode
   rotate: false
-  xy: 874, 1710
+  xy: 1, 346
   size: 565, 113
   orig: 565, 113
   offset: 0, 0
   index: -1
 Play
   rotate: false
-  xy: 1, 1
+  xy: 1, 231
   size: 565, 113
   orig: 565, 113
   offset: 0, 0
   index: -1
 Quit
   rotate: false
-  xy: 874, 1595
+  xy: 1, 116
   size: 565, 113
   orig: 565, 113
   offset: 0, 0
   index: -1
 Restart
   rotate: false
-  xy: 874, 1480
+  xy: 1, 1
   size: 565, 113
   orig: 565, 113
   offset: 0, 0
   index: -1
+ModeSelectWindow
+  rotate: false
+  xy: 1, 1297
+  size: 871, 658
+  orig: 871, 658
+  offset: 0, 0
+  index: -1
+newModeBg
+  rotate: false
+  xy: 1, 461
+  size: 871, 834
+  orig: 871, 834
+  offset: 0, 0
+  index: -1
+WinDialog
+  rotate: false
+  xy: 874, 1297
+  size: 871, 658
+  orig: 871, 658
+  offset: 0, 0
+  index: -1
+help_about
+  rotate: false
+  xy: 568, 16
+  size: 540, 406
+  orig: 540, 406
+  offset: 0, 0
+  index: -1
+
+UISkin4.png
+size: 1171,1171
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+No
+  rotate: false
+  xy: 543, 160
+  size: 342, 135
+  orig: 342, 135
+  offset: 0, 0
+  index: -1
+Ok
+  rotate: false
+  xy: 1, 73
+  size: 342, 135
+  orig: 342, 135
+  offset: 0, 0
+  index: -1
+Yes
+  rotate: false
+  xy: 543, 297
+  size: 342, 135
+  orig: 342, 135
+  offset: 0, 0
+  index: -1
+left arrow
+  rotate: false
+  xy: 915, 402
+  size: 168, 254
+  orig: 168, 254
+  offset: 0, 0
+  index: -1
+right arrow
+  rotate: false
+  xy: 887, 146
+  size: 168, 254
+  orig: 168, 254
+  offset: 0, 0
+  index: -1
 Toggle-left
   rotate: false
-  xy: 1441, 1713
+  xy: 543, 546
   size: 370, 110
   orig: 370, 110
   offset: 0, 0
   index: -1
 Toggle-right
   rotate: false
-  xy: 1203, 446
+  xy: 543, 434
   size: 370, 110
   orig: 370, 110
   offset: 0, 0
   index: -1
-newModeBg
-  rotate: false
-  xy: 1, 989
-  size: 871, 834
-  orig: 871, 834
-  offset: 0, 0
-  index: -1
 default
   rotate: false
-  xy: 1203, 558
+  xy: 543, 658
   size: 512, 512
   orig: 512, 512
   offset: 0, 0
   index: -1
 dimm
   rotate: false
-  xy: 661, 27
+  xy: 1, 210
   size: 540, 960
   orig: 540, 960
   offset: 0, 0
   index: -1
-help_about
-  rotate: false
-  xy: 874, 1072
-  size: 540, 406
-  orig: 540, 406
-  offset: 0, 0
-  index: -1
 help_button
   rotate: false
-  xy: 1362, 13
+  xy: 504, 1
   size: 157, 157
   orig: 157, 157
   offset: 0, 0
   index: -1
 menu_button
   rotate: false
-  xy: 1203, 13
+  xy: 345, 51
   size: 157, 157
   orig: 157, 157
   offset: 0, 0
